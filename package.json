@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "jimp": "^0.22.10",
+    "puppeteer": "^24.28.0",
     "tesseract.js": "^5.1.1"
   }
 }
