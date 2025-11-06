@@ -1,22 +1,13 @@
-const puppeteer = require('puppeteer')
+const { parse } = require('node-html-parser')
 const { createWorker } = require('tesseract.js');
 const Jimp = require('jimp');
 
-(async () => {
-    const browser = await puppeteer.launch({ args: ["--no-sandbox"] });
-    const page = await browser.newPage();
-
-    await page.goto('https://www.sescpr.com.br/unidade/sesc-da-esquina/espaco/restaurante-3/');
-
-    await page.setViewport({ width: 1080, height: 1024 });
-
-    const src = await page.$eval('.alignnone', (img) => {
-        const imgSrc = img.getAttribute("src")
-        return imgSrc
-    })
-    console.log('src', src)
-
-
+async function handler() {
+    const response = await fetch('https://www.sescpr.com.br/unidade/sesc-da-esquina/espaco/restaurante-3/');
+    const html = await response.text();
+    const root = parse(html);
+    const img = root.querySelector('.alignnone');
+    const src = img.getAttribute('src');
     const worker = await createWorker('eng');
     const image = await Jimp.read(src);
 
@@ -32,29 +23,45 @@ const Jimp = require('jimp');
     const cropQuinta = image.clone().crop(marginLeft + (width + gap) * 3, marginTop, width, height)
     const cropSexta = image.clone().crop(marginLeft + (width + gap) * 4, marginTop, width, height)
 
-    await getText('segunda', cropSegunda)
-    await getText('terca', cropTerca)
-    await getText('quarta', cropQuarta)
-    await getText('quinta', cropQuinta)
-    await getText('sexta', cropSexta)
-    await browser.close();
+    const dateHeight = 76
+    const dateGap = 9
+    const dateMarginTop = marginTop - dateHeight - dateGap
+
+    const cropDataSegunda = image.clone().crop(marginLeft, dateMarginTop, width, dateHeight)
+    const cropDataTerca = image.clone().crop(marginLeft + width + gap, dateMarginTop, width, dateHeight)
+    const cropDataQuarta = image.clone().crop(marginLeft + (width + gap) * 2, dateMarginTop, width, dateHeight)
+    const cropDataQuinta = image.clone().crop(marginLeft + (width + gap) * 3, dateMarginTop, width, dateHeight)
+    const cropDataSexta = image.clone().crop(marginLeft + (width + gap) * 4, dateMarginTop, width, dateHeight)
+
+    await getText('segunda', cropSegunda, cropDataSegunda)
+    await getText('terca', cropTerca, cropDataTerca)
+    await getText('quarta', cropQuarta, cropDataQuarta)
+    await getText('quinta', cropQuinta, cropDataQuinta)
+    await getText('sexta', cropSexta, cropDataSexta)
+
     await worker.terminate();
-})();
+}
 
-async function getText(name, cropped) {
+async function getText(name, cropped, croppedData) {
     const worker = await createWorker('eng');
-
-    // Descomentar para ajudar na depuração
+    //Descomentar para ajudar na depuração
     // const file = './' + name + '.png'
     // await cropped.writeAsync(file)
     // console.log('Escrito arquivo ' + file)
-
+    
     const buffer = await cropped.getBufferAsync("image/png")
-    const result = await worker.recognize(buffer)
+    const bufferData = await croppedData.getBufferAsync("image/png")
+    const texto = await worker.recognize(buffer)
+    const data = await worker.recognize(bufferData)
+    const menu = {
+        text: texto.data.text,
+        date: data.data.text,
+    }
     console.log('---- TEXTO RECONHECIDO ----')
-    console.log(result.data.text)
-
+    console.log(`Data: ${menu.date} \n${menu.text}`);
     await worker.terminate();
 
-    return result.data.text
+    return menu
 }
+
+module.exports.handler = handler

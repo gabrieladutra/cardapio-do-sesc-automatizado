@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "jimp": "^0.22.10",
+    "node-fetch": "^3.3.2",
+    "node-html-parser": "^7.0.1",
     "puppeteer": "^24.28.0",
     "tesseract.js": "^5.1.1"
   }
