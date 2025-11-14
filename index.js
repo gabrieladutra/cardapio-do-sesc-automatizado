@@ -44,9 +44,6 @@ async function handler() {
     const menus = [segunda, terca, quarta, quinta, sexta]
     for (const diaAtual of menus) {
         const version = await verifyVersion(diaAtual.date)
-        console.log("__-___-__-___-____-_____-_____-____-____-___-")
-        console.log(version)
-
         if (version.length === 0) {
             console.log("****entrou****")
             await saveToDynamoDB(diaAtual, 1)
@@ -73,7 +70,6 @@ async function getText(name, cropped, croppedData) {
     // const file = './' + name + '.png'
     // await cropped.writeAsync(file)
     // console.log('Escrito arquivo ' + file)
-
     const buffer = await cropped.getBufferAsync("image/png")
     const bufferData = await croppedData.getBufferAsync("image/png")
     const texto = await worker.recognize(buffer)
@@ -88,11 +84,8 @@ async function getText(name, cropped, croppedData) {
     return menu
 }
 
-
 module.exports.handler = handler
 handler()
-
-
 
 async function saveToDynamoDB(menu, versao) {
     const params = {
@@ -131,5 +124,3 @@ async function verifyVersion(date) {
     return data.Items;
 
 }
-
-
