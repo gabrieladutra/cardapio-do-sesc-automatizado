@@ -1,7 +1,8 @@
-const { DynamoDBClient, PutItemCommand, GetItemCommand } = require('@aws-sdk/client-dynamodb');
+const { DynamoDBClient, PutItemCommand, QueryCommand } = require('@aws-sdk/client-dynamodb');
 const { parse } = require('node-html-parser')
 const { createWorker } = require('tesseract.js');
 const Jimp = require('jimp');
+const { unmarshall } = require("@aws-sdk/util-dynamodb");
 
 const dynamo = new DynamoDBClient({ region: 'sa-east-1' });
 
@@ -42,8 +43,38 @@ async function handler() {
     const quinta = await getText('quinta', cropQuinta, cropDataQuinta)
     const sexta = await getText('sexta', cropSexta, cropDataSexta)
 
-    // sexta.
+    const menus = [segunda, terca, quarta, quinta, sexta]
+    for (const diaAtual of menus) {
+        // Recuperar o dia do banco de dados
+        // Se não houver, inserir
+        const version = await verifyVersion(diaAtual.date)
+        if (version == "") {
+            await saveToDynamoDB(diaAtual,1)
+        }
+        // Depois da parte de cima
+        // Se houver, verificar se o texto está igual
+        // Se estiver, ir para próximo dia
+        let maior = version[0];
 
+        for (let i = 1; i < version.length; i++) {
+            if (version[i].versao.N > maior.versao.N) {
+                maior = version[i];
+            }
+        }
+
+        
+        console.log("-----------------------------------")
+        console.log("Maior")
+        console.log(maior)
+
+        // Se não estiver igual, inserir nova versão
+        if(maior.text != diaAtual.text){
+            
+        const novaVersao = maior.versao.N++;
+        await saveToDynamoDB(diaAtual, novaVersao);
+            console.log("Teste funcionou!")
+        }
+    }
     await worker.terminate();
 }
 
@@ -69,36 +100,49 @@ async function getText(name, cropped, croppedData) {
 }
 
 
-// module.exports.handler = handler
-// handler()
-verifyVersion('07/11/2025')
-async function verifyVersion(date){
-   const getParams = {
-        TableName: 'menu',
-        Key: { data: { S: String(date).trim() } },
-    };
-    const response = await dynamo.send(new GetItemCommand(getParams));
-    if (!response.Item) {
-        return 1;
-    }
-    const currentVersion = parseInt(response.Item.versao.N);
-    return currentVersion++
-}
+module.exports.handler = handler
+handler()
 
 
-async function saveToDynamoDB(menu) {
-    const version = await verifyVersion(menu.date);
 
+async function saveToDynamoDB(menu,versao) {
     const params = {
         TableName: 'menu',
 
         Item: {
             data: { S: String(menu.date || '').trim() },
             texto: { S: String(menu.text || '').trim() },
-            versao: { N: String(version) },
+            versao: { N: String(versao) },
         },
     };
 
     await dynamo.send(new PutItemCommand(params));
     console.log('Item salvo no DynamoDB:', menu.date);
 }
+
+async function verifyVersion(date) {
+    const params = {
+        TableName: "menu",
+        KeyConditionExpression: "#d = :d",
+        ExpressionAttributeNames: {
+            "#d": "data",
+        },
+        ExpressionAttributeValues: {
+            ":d": { S: String(date).trim() },
+        },
+    };
+    const data = await dynamo.send(new QueryCommand(params));
+    if (!data.Items || data.Items.length === 0) {
+        console.log("Nenhum item encontrado para:", date);
+        return "";
+    }
+    console.log("Itens encontrados:", data.Items);
+
+    return data.Items;
+
+}
+
+(async () => {
+    await verifyVersion("07/11/2025");
+})();
+
