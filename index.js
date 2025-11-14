@@ -2,7 +2,6 @@ const { DynamoDBClient, PutItemCommand, QueryCommand } = require('@aws-sdk/clien
 const { parse } = require('node-html-parser')
 const { createWorker } = require('tesseract.js');
 const Jimp = require('jimp');
-const { unmarshall } = require("@aws-sdk/util-dynamodb");
 
 const dynamo = new DynamoDBClient({ region: 'sa-east-1' });
 
@@ -45,15 +44,11 @@ async function handler() {
 
     const menus = [segunda, terca, quarta, quinta, sexta]
     for (const diaAtual of menus) {
-        // Recuperar o dia do banco de dados
-        // Se não houver, inserir
         const version = await verifyVersion(diaAtual.date)
         if (version == "") {
-            await saveToDynamoDB(diaAtual,1)
+            await saveToDynamoDB(diaAtual, 1)
+            continue; 
         }
-        // Depois da parte de cima
-        // Se houver, verificar se o texto está igual
-        // Se estiver, ir para próximo dia
         let maior = version[0];
 
         for (let i = 1; i < version.length; i++) {
@@ -61,88 +56,76 @@ async function handler() {
                 maior = version[i];
             }
         }
-
-        
-        console.log("-----------------------------------")
-        console.log("Maior")
-        console.log(maior)
-
-        // Se não estiver igual, inserir nova versão
-        if(maior.text != diaAtual.text){
-            
-        const novaVersao = maior.versao.N++;
-        await saveToDynamoDB(diaAtual, novaVersao);
-            console.log("Teste funcionou!")
+        if (maior.text != diaAtual.text) {
+            const novaVersao = maior.versao.N++;
+            await saveToDynamoDB(diaAtual, novaVersao);
         }
+        await worker.terminate();
     }
-    await worker.terminate();
 }
 
-async function getText(name, cropped, croppedData) {
-    const worker = await createWorker('eng');
-    //Descomentar para ajudar na depuração
-    // const file = './' + name + '.png'
-    // await cropped.writeAsync(file)
-    // console.log('Escrito arquivo ' + file)
+    async function getText(name, cropped, croppedData) {
+        const worker = await createWorker('eng');
+        //Descomentar para ajudar na depuração
+        // const file = './' + name + '.png'
+        // await cropped.writeAsync(file)
+        // console.log('Escrito arquivo ' + file)
 
-    const buffer = await cropped.getBufferAsync("image/png")
-    const bufferData = await croppedData.getBufferAsync("image/png")
-    const texto = await worker.recognize(buffer)
-    const data = await worker.recognize(bufferData)
-    const menu = {
-        text: texto.data.text,
-        date: data.data.text,
+        const buffer = await cropped.getBufferAsync("image/png")
+        const bufferData = await croppedData.getBufferAsync("image/png")
+        const texto = await worker.recognize(buffer)
+        const data = await worker.recognize(bufferData)
+        const menu = {
+            text: texto.data.text,
+            date: data.data.text,
+        }
+        console.log('---- TEXTO RECONHECIDO ----')
+        console.log(`Data: ${menu.date} \n${menu.text}`);
+        await worker.terminate();
+        return menu
     }
-    console.log('---- TEXTO RECONHECIDO ----')
-    console.log(`Data: ${menu.date} \n${menu.text}`);
-    await worker.terminate();
-    return menu
-}
 
 
-module.exports.handler = handler
-handler()
+    module.exports.handler = handler
+    handler()
 
 
 
-async function saveToDynamoDB(menu,versao) {
-    const params = {
-        TableName: 'menu',
+    async function saveToDynamoDB(menu, versao) {
+        const params = {
+            TableName: 'menu',
 
-        Item: {
-            data: { S: String(menu.date || '').trim() },
-            texto: { S: String(menu.text || '').trim() },
-            versao: { N: String(versao) },
-        },
-    };
+            Item: {
+                data: { S: String(menu.date || '').trim() },
+                texto: { S: String(menu.text || '').trim() },
+                versao: { N: String(versao) },
+            },
+        };
 
-    await dynamo.send(new PutItemCommand(params));
-    console.log('Item salvo no DynamoDB:', menu.date);
-}
-
-async function verifyVersion(date) {
-    const params = {
-        TableName: "menu",
-        KeyConditionExpression: "#d = :d",
-        ExpressionAttributeNames: {
-            "#d": "data",
-        },
-        ExpressionAttributeValues: {
-            ":d": { S: String(date).trim() },
-        },
-    };
-    const data = await dynamo.send(new QueryCommand(params));
-    if (!data.Items || data.Items.length === 0) {
-        console.log("Nenhum item encontrado para:", date);
-        return "";
+        await dynamo.send(new PutItemCommand(params));
+        console.log('Item salvo no DynamoDB:', menu.date);
     }
-    console.log("Itens encontrados:", data.Items);
 
-    return data.Items;
+    async function verifyVersion(date) {
+        const params = {
+            TableName: "menu",
+            KeyConditionExpression: "#d = :d",
+            ExpressionAttributeNames: {
+                "#d": "data",
+            },
+            ExpressionAttributeValues: {
+                ":d": { S: String(date).trim() },
+            },
+        };
+        const data = await dynamo.send(new QueryCommand(params));
+        if (!data.Items || data.Items.length === 0) {
+            console.log("Nenhum item encontrado para:", date);
+            return "";
+        }
+        console.log("Itens encontrados:", data.Items);
 
-}
+        return data.Items;
 
-(async () => {
-    await verifyVersion("07/11/2025");
-})();
+    }
+
 
