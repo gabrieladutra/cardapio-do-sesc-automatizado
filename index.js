@@ -2,7 +2,6 @@ const { DynamoDBClient, PutItemCommand, QueryCommand } = require('@aws-sdk/clien
 const { parse } = require('node-html-parser')
 const { createWorker } = require('tesseract.js');
 const Jimp = require('jimp');
-
 const dynamo = new DynamoDBClient({ region: 'sa-east-1' });
 
 async function handler() {
@@ -49,7 +48,7 @@ async function handler() {
             await saveToDynamoDB(diaAtual, 1)
             continue;
         }
-        
+
         let maior = version[0];
 
         for (let i = 1; i < version.length; i++) {
@@ -62,8 +61,8 @@ async function handler() {
             await saveToDynamoDB(diaAtual, novaVersao);
         }
     }
+   
 }
-
 async function getText(name, cropped, croppedData) {
     const worker = await createWorker('eng');
     //Descomentar para ajudar na depuração
@@ -85,7 +84,7 @@ async function getText(name, cropped, croppedData) {
 }
 
 module.exports.handler = handler
-handler()
+// handler()
 
 async function saveToDynamoDB(menu, versao) {
     const params = {
