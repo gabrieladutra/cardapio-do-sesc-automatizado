@@ -1,5 +1,5 @@
 import { DynamoDBClient, PutItemCommand, QueryCommand } from '@aws-sdk/client-dynamodb';
-const { parse } = require('node-html-parser')
+const { parse } = require('node-html-parser');
 const { createWorker } = require('tesseract.js');
 const Jimp = require('jimp');
 const dynamo = new DynamoDBClient({ region: 'sa-east-1' });
@@ -86,7 +86,7 @@ async function getText(name, cropped, croppedData) {
 
 module.exports.handler = handler
 
-//handler()
+handler()
 
 async function saveToDynamoDB(menu, versao) {
     const params = {
@@ -105,7 +105,7 @@ async function saveToDynamoDB(menu, versao) {
 
 async function verifyVersion(date) {
     const params = {
-        TableName: "menu",
+        TableName: "menuLanchonete",
         KeyConditionExpression: "#d = :d",
         ExpressionAttributeNames: {
             "#d": "data",
@@ -123,3 +123,4 @@ async function verifyVersion(date) {
     console.log("Itens encontrados:", data.Items);
 
     return data.Items;
+}
