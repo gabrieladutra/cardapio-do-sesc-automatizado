@@ -4,7 +4,7 @@ Automação para capturar o cardápio diário do Sesc, extrair o texto via OCR, 
 
 ### Arquitetura
 
-![Arquitetura](/assets/arch.drawio.png)
+![Arquitetura](/assets/arch4.png)
 
 ---
 
