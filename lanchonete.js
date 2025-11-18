@@ -1,8 +1,8 @@
-//import { DynamoDBClient, PutItemCommand, QueryCommand } from '@aws-sdk/client-dynamodb';
+import { DynamoDBClient, PutItemCommand, QueryCommand } from '@aws-sdk/client-dynamodb';
 const { parse } = require('node-html-parser')
 const { createWorker } = require('tesseract.js');
 const Jimp = require('jimp');
-//const dynamo = new DynamoDBClient({ region: 'sa-east-1' });
+const dynamo = new DynamoDBClient({ region: 'sa-east-1' });
 
 async function handler() {
     const response = await fetch('https://www.sescpr.com.br/unidade/sesc-da-esquina/espaco/lanchonete/');
@@ -40,29 +40,29 @@ async function handler() {
     const quinta = await getText('quinta', cropQuinta, cropDataQuinta)
     const sexta = await getText('sexta', cropSexta, cropDataSexta)
 
-//     const menus = [segunda, terca, quarta, quinta, sexta]
-//     for (const diaAtual of menus) {
-//         const version = await verifyVersion(diaAtual.date)
-//         if (version.length === 0) {
-//             console.log("****entrou****")
-//             await saveToDynamoDB(diaAtual, 1)
-//             continue;
-//         }
+    const menus = [segunda, terca, quarta, quinta, sexta]
+    for (const diaAtual of menus) {
+        const version = await verifyVersion(diaAtual.date)
+        if (version.length === 0) {
+            console.log("****entrou****")
+            await saveToDynamoDB(diaAtual, 1)
+            continue;
+        }
 
-//         let maior = version[0];
+        let maior = version[0];
 
-//         for (let i = 1; i < version.length; i++) {
-//             if (parseInt(version[i].versao.N) > parseInt(maior.versao.N)) {
-//                 maior = version[i];
-//             }
-//         }
-//         if (maior.texto.S.trim() !== diaAtual.text.trim()) {
-//             const novaVersao = parseInt(maior.versao.N) + 1;
-//             await saveToDynamoDB(diaAtual, novaVersao);
-//         }
-//     }
+        for (let i = 1; i < version.length; i++) {
+            if (parseInt(version[i].versao.N) > parseInt(maior.versao.N)) {
+                maior = version[i];
+            }
+        }
+        if (maior.texto.S.trim() !== diaAtual.text.trim()) {
+            const novaVersao = parseInt(maior.versao.N) + 1;
+            await saveToDynamoDB(diaAtual, novaVersao);
+        }
+    }
    
-// }
+}
 async function getText(name, cropped, croppedData) {
     const worker = await createWorker('eng');
     // //Descomentar para ajudar na depuração
@@ -82,45 +82,44 @@ async function getText(name, cropped, croppedData) {
     await worker.terminate();
     return menu
 }
-}
+
 
 module.exports.handler = handler
 
+//handler()
 
-handler()
+async function saveToDynamoDB(menu, versao) {
+    const params = {
+        TableName: 'menu',
 
-// async function saveToDynamoDB(menu, versao) {
-//     const params = {
-//         TableName: 'menu',
+        Item: {
+            data: { S: String(menu.date || '').trim() },
+            texto: { S: String(menu.text || '').trim() },
+            versao: { N: String(versao) },
+        },
+    };
 
-//         Item: {
-//             data: { S: String(menu.date || '').trim() },
-//             texto: { S: String(menu.text || '').trim() },
-//             versao: { N: String(versao) },
-//         },
-//     };
+    await dynamo.send(new PutItemCommand(params));
+    console.log('Item salvo no DynamoDB:', menu.date);
+}
 
-//     await dynamo.send(new PutItemCommand(params));
-//     console.log('Item salvo no DynamoDB:', menu.date);
-// }
+async function verifyVersion(date) {
+    const params = {
+        TableName: "menu",
+        KeyConditionExpression: "#d = :d",
+        ExpressionAttributeNames: {
+            "#d": "data",
+        },
+        ExpressionAttributeValues: {
+            ":d": { S: String(date).trim() },
+        },
+        ConsistentRead: true,
+    };
+    const data = await dynamo.send(new QueryCommand(params));
+    if (!data.Items || data.Items.length === 0) {
+        console.log("Nenhum item encontrado para:", date);
+        return [];
+    }
+    console.log("Itens encontrados:", data.Items);
 
-// async function verifyVersion(date) {
-//     const params = {
-//         TableName: "menu",
-//         KeyConditionExpression: "#d = :d",
-//         ExpressionAttributeNames: {
-//             "#d": "data",
-//         },
-//         ExpressionAttributeValues: {
-//             ":d": { S: String(date).trim() },
-//         },
-//         ConsistentRead: true,
-//     };
-//     const data = await dynamo.send(new QueryCommand(params));
-//     if (!data.Items || data.Items.length === 0) {
-//         console.log("Nenhum item encontrado para:", date);
-//         return [];
-//     }
-//     console.log("Itens encontrados:", data.Items);
-
-//     return data.Items;
+    return data.Items;
