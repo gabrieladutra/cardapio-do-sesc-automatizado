@@ -1,9 +1,10 @@
 ## Cardápio do Sesc Automatizado  
 Automação para capturar o cardápio diário do Sesc, extrair o texto via OCR, detectar mudanças e enviar SMS automaticamente usando AWS.  
 
-<p align="center">
-  <img src="./docs/arquitetura.png" width="750" />
-</p>
+
+### Arquitetura
+
+![Arquitetura](/assets/arch.drawio.png)
 
 ---
 
@@ -28,13 +29,4 @@ Automação para capturar o cardápio diário do Sesc, extrair o texto via OCR, 
 5. Enviar SMS via AWS SNS  
 6. Controlar a execução da função **Lambda** de Segunda á Sexta ás 11:00 usando o **EventBridge**
 
-
 ---
-
-### Arquitetura
-
-> Coloque a imagem final em:  
-> `./docs/arquitetura.png`
-
-```md
-![Arquitetura](/assets/arch.drawio.png)
