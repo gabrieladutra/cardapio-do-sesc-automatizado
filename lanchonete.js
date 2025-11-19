@@ -1,5 +1,5 @@
-import { DynamoDBClient, PutItemCommand, QueryCommand } from '@aws-sdk/client-dynamodb';
-const { parse } = require('node-html-parser');
+const { DynamoDBClient, PutItemCommand, QueryCommand } = require('@aws-sdk/client-dynamodb');
+const { parse } = require('node-html-parser')
 const { createWorker } = require('tesseract.js');
 const Jimp = require('jimp');
 const dynamo = new DynamoDBClient({ region: 'sa-east-1' });
@@ -24,7 +24,7 @@ async function handler() {
     const cropQuinta = image.clone().crop(marginLeft + (width + gap) * 3, marginTop, width, height)
     const cropSexta = image.clone().crop(marginLeft + (width + gap) * 4, marginTop, width, height)
 
-    const dateHeight = 76
+    const dateHeight = 103
     const dateGap = 9
     const dateMarginTop = marginTop - dateHeight - dateGap
 
@@ -44,7 +44,6 @@ async function handler() {
     for (const diaAtual of menus) {
         const version = await verifyVersion(diaAtual.date)
         if (version.length === 0) {
-            console.log("****entrou****")
             await saveToDynamoDB(diaAtual, 1)
             continue;
         }
@@ -65,10 +64,10 @@ async function handler() {
 }
 async function getText(name, cropped, croppedData) {
     const worker = await createWorker('eng');
-    // //Descomentar para ajudar na depuração
-    // const file = './' + name + '.png'
-    // await cropped.writeAsync(file)
-    // console.log('Escrito arquivo ' + file)
+    //Descomentar para ajudar na depuração
+    const file = './' + name + '.png'
+    await croppedData.writeAsync(file)
+    console.log('Escrito arquivo ' + file)
     const buffer = await cropped.getBufferAsync("image/png")
     const bufferData = await croppedData.getBufferAsync("image/png")
     const texto = await worker.recognize(buffer)
@@ -90,7 +89,7 @@ handler()
 
 async function saveToDynamoDB(menu, versao) {
     const params = {
-        TableName: 'menu',
+        TableName: 'lanchonete',
 
         Item: {
             data: { S: String(menu.date || '').trim() },
@@ -105,7 +104,7 @@ async function saveToDynamoDB(menu, versao) {
 
 async function verifyVersion(date) {
     const params = {
-        TableName: "menuLanchonete",
+        TableName: "lanchonete",
         KeyConditionExpression: "#d = :d",
         ExpressionAttributeNames: {
             "#d": "data",
