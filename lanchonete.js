@@ -65,9 +65,9 @@ async function handler() {
 async function getText(name, cropped, croppedData) {
     const worker = await createWorker('eng');
     //Descomentar para ajudar na depuração
-    const file = './' + name + '.png'
-    await croppedData.writeAsync(file)
-    console.log('Escrito arquivo ' + file)
+    // const file = './' + name + '.png'
+    // await croppedData.writeAsync(file)
+    // console.log('Escrito arquivo ' + file)
     const buffer = await cropped.getBufferAsync("image/png")
     const bufferData = await croppedData.getBufferAsync("image/png")
     const texto = await worker.recognize(buffer)
@@ -85,7 +85,7 @@ async function getText(name, cropped, croppedData) {
 
 module.exports.handler = handler
 
-handler()
+//handler()
 
 async function saveToDynamoDB(menu, versao) {
     const params = {

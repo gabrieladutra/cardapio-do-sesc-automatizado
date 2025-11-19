@@ -40,35 +40,34 @@ async function handler() {
     const quinta = await getText('quinta', cropQuinta, cropDataQuinta)
     const sexta = await getText('sexta', cropSexta, cropDataSexta)
 
-    // const menus = [segunda, terca, quarta, quinta, sexta]
-    // for (const diaAtual of menus) {
-    //     const version = await verifyVersion(diaAtual.date)
-    //     if (version.length === 0) {
-    //         console.log("****entrou****")
-    //         await saveToDynamoDB(diaAtual, 1)
-    //         continue;
-    //     }
+    const menus = [segunda, terca, quarta, quinta, sexta]
+    for (const diaAtual of menus) {
+        const version = await verifyVersion(diaAtual.date)
+        if (version.length === 0) {
+            await saveToDynamoDB(diaAtual, 1)
+            continue;
+        }
 
-    //     let maior = version[0];
+        let maior = version[0];
 
-    //     for (let i = 1; i < version.length; i++) {
-    //         if (parseInt(version[i].versao.N) > parseInt(maior.versao.N)) {
-    //             maior = version[i];
-    //         }
-    //     }
-    //     if (maior.texto.S.trim() !== diaAtual.text.trim()) {
-    //         const novaVersao = parseInt(maior.versao.N) + 1;
-    //         await saveToDynamoDB(diaAtual, novaVersao);
-    //     }
-    // }
+        for (let i = 1; i < version.length; i++) {
+            if (parseInt(version[i].versao.N) > parseInt(maior.versao.N)) {
+                maior = version[i];
+            }
+        }
+        if (maior.texto.S.trim() !== diaAtual.text.trim()) {
+            const novaVersao = parseInt(maior.versao.N) + 1;
+            await saveToDynamoDB(diaAtual, novaVersao);
+        }
+    }
    
 }
 async function getText(name, cropped, croppedData) {
     const worker = await createWorker('eng');
     //Descomentar para ajudar na depuração
-    const file = './' + name + '.png'
-    await cropped.writeAsync(file)
-    console.log('Escrito arquivo ' + file)
+    // const file = './' + name + '.png'
+    // await cropped.writeAsync(file)
+    // console.log('Escrito arquivo ' + file)
     const buffer = await cropped.getBufferAsync("image/png")
     const bufferData = await croppedData.getBufferAsync("image/png")
     const texto = await worker.recognize(buffer)
