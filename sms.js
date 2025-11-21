@@ -1,4 +1,4 @@
-const { DynamoDBClient, PutItemCommand, QueryCommand } = require('@aws-sdk/client-dynamodb');
+const { DynamoDBClient, QueryCommand } = require('@aws-sdk/client-dynamodb');
 const dynamo = new DynamoDBClient({ region: 'sa-east-1' });
 const { SNSClient, PublishCommand } = require("@aws-sdk/client-sns");
 const sns = new SNSClient({ region: "sa-east-1" });
@@ -13,9 +13,9 @@ function getTodayBR() {
     return `${dia}/${mes}/${ano}`;
 }
 
-async function getMenuOfTheDayList(date) {
+async function getMenuOfTheDayList(tableName, date) {
     const params = {
-        TableName: "menu",
+        TableName: tableName,
         KeyConditionExpression: "#d = :d",
         ExpressionAttributeNames: { "#d": "data" },
         ExpressionAttributeValues: { ":d": { S: String(date).trim() } },
@@ -31,12 +31,10 @@ async function getMenuOfTheDayList(date) {
     return data.Items;
 }
 
-async function handler() {
-    const hoje = getTodayBR();
-    const menus = await getMenuOfTheDayList(hoje);
 
+async function findMenu(menus, date) {
     if (menus.length === 0) {
-        console.log("Nenhum menu encontrado para hoje:", hoje);
+        console.log("Nenhum menu encontrado para hoje:", date);
         return;
     }
     let menuAtualizado = menus[0];
@@ -45,13 +43,56 @@ async function handler() {
             menuAtualizado = menus[i];
         }
     }
-const mensagem = `${hoje}\n${menuAtualizado.texto.S}`;
-        await sns.send(new PublishCommand({
-            TopicArn: "arn:aws:sns:sa-east-1:924568413237:menuSMS",
-            Message: mensagem
-        })); 
-        console.log(mensagem)
+    return menuAtualizado
 
 }
+
+
+async function sendMessage(mensagem) {
+    await sns.send(new PublishCommand({
+        TopicArn: "arn:aws:sns:sa-east-1:924568413237:menuSMS",
+        Message: mensagem
+    }));
+
+}
+
+async function handler() {
+    const hoje = getTodayBR();
+
+    const restauranteTable = "menu";
+    const lanchoneteTable = "lanchonete";
+
+    const menuRestaurante = await getMenuOfTheDayList(restauranteTable, hoje);
+    const menuLanchonete = await getMenuOfTheDayList(lanchoneteTable, hoje);
+
+    const menuAtualizadoRestaurante = await findMenu(menuRestaurante, hoje);
+    const menuAtualizadoLanchonete = await findMenu(menuLanchonete, hoje);
+
+    const mensagemRestaurante = `${hoje}\n${menuAtualizadoRestaurante.texto.S}`;
+    await sendMessage(mensagemRestaurante);
+
+    const mensagemLanchonete = `${hoje}\n${menuAtualizadoLanchonete.texto.S}`;
+    await sendMessage(mensagemLanchonete);
+}
+// async function handler() {
+//     const hoje = getTodayBR();
+
+//     const restauranteTable = "menu";
+//     const lanchoneteTable = "lanchonete"
+
+//     const menuRestaurante = await getMenuOfTheDayList(restauranteTable, hoje);
+//     const menuLanchonete = await getMenuOfTheDayList(lanchoneteTable, hoje);
+
+//     const menuAtualizadoRestaurante = await findMenu(menuRestaurante, hoje);
+//     const menuAtualizadoLanchonete = await findMenu(menuLanchonete, hoje);
+
+
+//     const mensagemRestaurante = `${hoje}\n${menuAtualizadoRestaurante.texto.S}`;
+//     const mensagemLanchonete = `${hoje}\n${menuAtualizadoLanchonete.texto.S}`;
+
+//     sendMessage(mensagemRestaurante)
+//     sendMessage(mensagemLanchonete)
+// }
 module.exports.handler = handler
-// handler()
+
+handler()
