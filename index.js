@@ -83,7 +83,7 @@ async function getText(name, cropped, croppedData) {
 }
 
 module.exports.handler = handler
- handler()
+//handler()
 
 async function saveToDynamoDB(menu, versao) {
     const params = {
