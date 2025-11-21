@@ -1,0 +1,20 @@
+{
+  "name": "puppetiertest",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.926.0",
+    "@aws-sdk/client-sns": "^3.931.0",
+    "@aws-sdk/lib-dynamodb": "^3.927.0",
+    "jimp": "^0.22.10",
+    "node-fetch": "^3.3.2",
+    "node-html-parser": "^7.0.1",
+    "tesseract.js": "^5.1.1"
+  }
+}
