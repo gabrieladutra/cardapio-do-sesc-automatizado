@@ -73,26 +73,8 @@ async function handler() {
 
     const mensagemLanchonete = `${hoje}\n${menuAtualizadoLanchonete.texto.S}`;
     await sendMessage(mensagemLanchonete);
+
+    
 }
-// async function handler() {
-//     const hoje = getTodayBR();
 
-//     const restauranteTable = "menu";
-//     const lanchoneteTable = "lanchonete"
-
-//     const menuRestaurante = await getMenuOfTheDayList(restauranteTable, hoje);
-//     const menuLanchonete = await getMenuOfTheDayList(lanchoneteTable, hoje);
-
-//     const menuAtualizadoRestaurante = await findMenu(menuRestaurante, hoje);
-//     const menuAtualizadoLanchonete = await findMenu(menuLanchonete, hoje);
-
-
-//     const mensagemRestaurante = `${hoje}\n${menuAtualizadoRestaurante.texto.S}`;
-//     const mensagemLanchonete = `${hoje}\n${menuAtualizadoLanchonete.texto.S}`;
-
-//     sendMessage(mensagemRestaurante)
-//     sendMessage(mensagemLanchonete)
-// }
 module.exports.handler = handler
-
-handler()
