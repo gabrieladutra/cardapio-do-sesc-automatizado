@@ -1,7 +1,7 @@
 // Ativa o modo mock
 process.env.LOCAL_TEST = "true";
 
-const { handler } = require("../sms.js");
+const { handler } = require("./sms.js");
 
 (async () => {
   try {
