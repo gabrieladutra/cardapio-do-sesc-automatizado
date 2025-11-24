@@ -21,13 +21,11 @@ function App() {
             {cardápio}
           </div>
 
-          <button className='rounded-md border-2 bg-green-700'>
-            <CircleChevronRight />
-            Menu Semanal</button>
-          
-      
-        </div>
 
+        </div>
+        <button className='rounded-md border-2 bg-green-700 text-white h-20 w-40'>
+          <CircleChevronRight />
+          Menu Semanal</button>
       </div>
     </>
   )
