@@ -53,6 +53,7 @@ async function sendMessage(mensagem) {
         TopicArn: "arn:aws:sns:sa-east-1:924568413237:menuSMS",
         Message: mensagem
     }));
+    consolçe.log("MENSAGEM ENVIADA COM SUCESSO")
 
 }
 
@@ -70,9 +71,11 @@ async function handler() {
 
     const mensagemRestaurante = `${hoje}\n${menuAtualizadoRestaurante.texto.S}`;
     await sendMessage(mensagemRestaurante);
+    console.log(mensagemRestaurante)
 
     const mensagemLanchonete = `${hoje}\n${menuAtualizadoLanchonete.texto.S}`;
     await sendMessage(mensagemLanchonete);
+    console.log(mensagemLanchonete)
 
     
 }

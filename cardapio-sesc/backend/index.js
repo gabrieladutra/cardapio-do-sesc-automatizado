@@ -1,7 +1,7 @@
 const { DynamoDBClient, PutItemCommand, QueryCommand } = require('@aws-sdk/client-dynamodb');
 const { parse } = require('node-html-parser')
 const { createWorker } = require('tesseract.js');
-const Jimp = require('jimp');
+const Jimp  = require('jimp');
 const dynamo = new DynamoDBClient({ region: 'sa-east-1' });
 
 async function handler() {
@@ -83,7 +83,7 @@ async function getText(name, cropped, croppedData) {
 }
 
 module.exports.handler = handler
-//handler()
+handler()
 
 async function saveToDynamoDB(menu, versao) {
     const params = {
