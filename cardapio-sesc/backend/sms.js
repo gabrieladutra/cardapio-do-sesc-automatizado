@@ -53,7 +53,7 @@ async function sendMessage(mensagem) {
         TopicArn: "arn:aws:sns:sa-east-1:924568413237:menuSMS",
         Message: mensagem
     }));
-    consolçe.log("MENSAGEM ENVIADA COM SUCESSO")
+    console.log("MENSAGEM ENVIADA COM SUCESSO")
 
 }
 
