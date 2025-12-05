@@ -24,37 +24,31 @@ async function getMenuOfTheDayList(tableName, date) {
 
     const data = await dynamo.send(new QueryCommand(params));
     if (!data.Items || data.Items.length === 0) {
-        console.log("Nenhum item encontrado para:", date);
+        console.log(`Nenhum item encontrado na tabela ${tableName} para a data:`, date);
         return [];
     }
 
     return data.Items;
 }
 
+async function findMenu(menus) {
+    if (!menus || menus.length === 0) return null;
 
-async function findMenu(menus, date) {
-    if (menus.length === 0) {
-        console.log("Nenhum menu encontrado para hoje:", date);
-        return;
-    }
     let menuAtualizado = menus[0];
     for (let i = 1; i < menus.length; i++) {
         if (parseInt(menus[i].versao.N) > parseInt(menuAtualizado.versao.N)) {
             menuAtualizado = menus[i];
         }
     }
-    return menuAtualizado
-
+    return menuAtualizado;
 }
-
 
 async function sendMessage(mensagem) {
     await sns.send(new PublishCommand({
         TopicArn: "arn:aws:sns:sa-east-1:924568413237:menuSMS",
         Message: mensagem
     }));
-    console.log("MENSAGEM ENVIADA COM SUCESSO")
-
+    console.log("MENSAGEM ENVIADA:", mensagem);
 }
 
 async function handler() {
@@ -63,21 +57,38 @@ async function handler() {
     const restauranteTable = "menu";
     const lanchoneteTable = "lanchonete";
 
-    const menuRestaurante = await getMenuOfTheDayList(restauranteTable, hoje);
-    const menuLanchonete = await getMenuOfTheDayList(lanchoneteTable, hoje);
+    // Buscar listas
+    const menuRest = await getMenuOfTheDayList(restauranteTable, hoje);
+    const menuLanch = await getMenuOfTheDayList(lanchoneteTable, hoje);
 
-    const menuAtualizadoRestaurante = await findMenu(menuRestaurante, hoje);
-    const menuAtualizadoLanchonete = await findMenu(menuLanchonete, hoje);
+    // Encontrar menus atualizados
+    const menuAtualizadoRest = await findMenu(menuRest);
+    const menuAtualizadoLan = await findMenu(menuLanch);
 
-    const mensagemRestaurante = `${hoje}\n${menuAtualizadoRestaurante.texto.S}`;
-    await sendMessage(mensagemRestaurante);
-    console.log(mensagemRestaurante)
+    if (!menuAtualizadoRest) {
+        console.log("Nenhum menu atualizado encontrado para restaurante.");
+    } else {
+        if (!menuAtualizadoRest.texto || !menuAtualizadoRest.texto.S) {
+            console.log("O item de restaurante não possui campo texto.");
+        } else {
+            const msgRest = `${hoje}\n${menuAtualizadoRest.texto.S}`;
+            await sendMessage(msgRest);
+        }
+    }
 
-    const mensagemLanchonete = `${hoje}\n${menuAtualizadoLanchonete.texto.S}`;
-    await sendMessage(mensagemLanchonete);
-    console.log(mensagemLanchonete)
+    if (!menuAtualizadoLan) {
+        console.log("Nenhum menu atualizado encontrado para lanchonete.");
+    } else {
+        if (!menuAtualizadoLan.texto || !menuAtualizadoLan.texto.S) {
+            console.log("O item de lanchonete não possui campo texto.");
+        } else {
+            const msgLan = `${hoje}\n${menuAtualizadoLan.texto.S}`;
+            await sendMessage(msgLan);
+        }
+    }
 
-    
+    return { status: "ok" };
 }
 
-module.exports.handler = handler
+module.exports.handler = handler;
+//handler()
