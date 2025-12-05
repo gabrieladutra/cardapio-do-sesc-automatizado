@@ -40,26 +40,26 @@ async function handler() {
     const quinta = await getText('quinta', cropQuinta, cropDataQuinta)
     const sexta = await getText('sexta', cropSexta, cropDataSexta)
 
-    // const menus = [segunda, terca, quarta, quinta, sexta]
-    // for (const diaAtual of menus) {
-    //     const version = await verifyVersion(diaAtual.date)
-    //     if (version.length === 0) {
-    //         await saveToDynamoDB(diaAtual, 1)
-    //         continue;
-    //     }
+    const menus = [segunda, terca, quarta, quinta, sexta]
+    for (const diaAtual of menus) {
+        const version = await verifyVersion(diaAtual.date)
+        if (version.length === 0) {
+            await saveToDynamoDB(diaAtual, 1)
+            continue;
+        }
 
-    //     let maior = version[0];
+        let maior = version[0];
 
-    //     for (let i = 1; i < version.length; i++) {
-    //         if (parseInt(version[i].versao.N) > parseInt(maior.versao.N)) {
-    //             maior = version[i];
-    //         }
-    //     }
-    //     if (maior.texto.S.trim() !== diaAtual.text.trim()) {
-    //         const novaVersao = parseInt(maior.versao.N) + 1;
-    //         await saveToDynamoDB(diaAtual, novaVersao);
-    //     }
-    // }
+        for (let i = 1; i < version.length; i++) {
+            if (parseInt(version[i].versao.N) > parseInt(maior.versao.N)) {
+                maior = version[i];
+            }
+        }
+        if (maior.texto.S.trim() !== diaAtual.text.trim()) {
+            const novaVersao = parseInt(maior.versao.N) + 1;
+            await saveToDynamoDB(diaAtual, novaVersao);
+        }
+    }
    
 }
 async function getText(name, cropped, croppedData) {
@@ -85,7 +85,7 @@ async function getText(name, cropped, croppedData) {
 
 module.exports.handler = handler
 
-handler()
+//handler()
 
 async function saveToDynamoDB(menu, versao) {
     const params = {
