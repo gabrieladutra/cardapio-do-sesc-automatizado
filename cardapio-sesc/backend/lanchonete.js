@@ -13,6 +13,7 @@ async function handler() {
     //console.log("SRC da imagem:", src);
     const image = await Jimp.read(src);
     //console.log("Largura x Altura da imagem:", image.bitmap.width, image.bitmap.height)
+    //08/12/2025 Largura x Altura da imagem: 1754 1241
 
     const marginLeft = 39
     const marginTop = 520
