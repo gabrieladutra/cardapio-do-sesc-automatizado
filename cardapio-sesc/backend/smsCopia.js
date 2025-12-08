@@ -1,8 +1,7 @@
-const { DynamoDBClient, QueryCommand } = require('@aws-sdk/client-dynamodb');
-const dynamo = new DynamoDBClient({ region: 'sa-east-1' });
-const { SNSClient, PublishCommand } = require("@aws-sdk/client-sns");
+import { SNSClient, PublishCommand } from "@aws-sdk/client-sns";
+import { getRestMessage, getLanMessage } from "./dailyMenu.js";
+
 const sns = new SNSClient({ region: "sa-east-1" });
-const { getRestMessage, getLanMessage} = require('./dailyMenu.js');
 
 async function sendMessage(mensagem) {
     await sns.send(new PublishCommand({
@@ -12,11 +11,10 @@ async function sendMessage(mensagem) {
     console.log("MENSAGEM ENVIADA:", mensagem);
 }
 
-async function handler() {
-    await sendMessage(getRestMessage());
-    await sendMessage(getLanMessage);
-    return { status: "ok" };
-}
+export default async function handler() {
+    const restMsg = await getRestMessage();
+    const lanMsg = await getLanMessage();
 
-module.exports.handler = handler;
-//handler()
+    await sendMessage(restMsg);
+    await sendMessage(lanMsg);
+}

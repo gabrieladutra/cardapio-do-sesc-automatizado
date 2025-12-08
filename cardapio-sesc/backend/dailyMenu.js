@@ -77,19 +77,14 @@ export async function getLanMessage(){
     return `${hoje}\n${menuAtualizadoLan.texto.S}`;
 }
 
-export async function handler(){
+export default async function handler(){
     const restMsg = await getRestMessage();
     const lanMsg = await getLanMessage();
 
-    console.log("Restaurante:", restMsg);
-    console.log("Lanchonete:", lanMsg);
+    return {
+        restaurante: restMsg,
+        lanchonete: lanMsg
+    };
 }
 
-handler();
-// module.exports = {
-//     getTodayBR,
-//     getMenuOfTheDayList,
-//     findMenu,
-//     getRestMessage,
-//     getLanMessage
-// };
+//handler()
