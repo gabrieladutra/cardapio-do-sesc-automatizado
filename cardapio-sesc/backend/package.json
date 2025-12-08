@@ -1,11 +1,14 @@
 {
   "dependencies": {
-    "@aws-sdk/client-dynamodb": "^3.943.0",
+    "@aws-sdk/client-dynamodb": "^3.946.0",
     "@aws-sdk/client-sns": "^3.943.0",
     "jimp": "^0.16.13",
     "lucide-react": "^0.554.0",
     "node-html-parser": "^7.0.1",
     "react-router-dom": "^7.9.6",
-    "tesseract.js": "^6.0.1"
+    "tesseract.js": "^6.0.1",
+    "name": "backend",
+    "version": "1.0.0",
+    "type": "module"
   }
 }
