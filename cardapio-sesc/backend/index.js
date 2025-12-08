@@ -25,7 +25,7 @@ async function handler() {
     const cropSexta = image.clone().crop(marginLeft + (width + gap) * 4, marginTop, width, height)
 
     const dateHeight = 76
-    const dateGap = 9
+    const dateGap = 5
     const dateMarginTop = marginTop - dateHeight - dateGap
 
     const cropDataSegunda = image.clone().crop(marginLeft, dateMarginTop, width, dateHeight)

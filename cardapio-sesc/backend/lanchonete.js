@@ -8,15 +8,17 @@ async function handler() {
     const response = await fetch('https://www.sescpr.com.br/unidade/sesc-da-esquina/espaco/lanchonete/');
     const html = await response.text();
     const root = parse(html);
-    const img = root.querySelector('.alignnone.size-full.wp-image-795783');
+    const img = root.querySelector('.alignnone.size-full');
     let src = img.getAttribute('src');
+    //console.log("SRC da imagem:", src);
     const image = await Jimp.read(src);
+    //console.log("Largura x Altura da imagem:", image.bitmap.width, image.bitmap.height)
 
-    const marginLeft = 65
-    const marginTop = 863
-    const height = 617
-    const width = 528
-    const gap = 39
+    const marginLeft = 39
+    const marginTop = 520
+    const height = 370
+    const width = 317
+    const gap = 24
 
     const cropSegunda = image.clone().crop(marginLeft, marginTop, width, height);
     const cropTerca = image.clone().crop(marginLeft + width + gap, marginTop, width, height);
@@ -24,7 +26,7 @@ async function handler() {
     const cropQuinta = image.clone().crop(marginLeft + (width + gap) * 3, marginTop, width, height)
     const cropSexta = image.clone().crop(marginLeft + (width + gap) * 4, marginTop, width, height)
 
-    const dateHeight = 103
+    const dateHeight = 70
     const dateGap = 9
     const dateMarginTop = marginTop - dateHeight - dateGap
 
@@ -65,9 +67,9 @@ async function handler() {
 async function getText(name, cropped, croppedData) {
     const worker = await createWorker('eng');
     //Descomentar para ajudar na depuração
-    // const file = './' + name + '.png'
-    // await cropped.writeAsync(file)
-    // console.log('Escrito arquivo ' + file)
+    //const file = './' + name + '.png'
+    //await croppedData.writeAsync(file)
+    //console.log('Escrito arquivo ' + file)
     const buffer = await cropped.getBufferAsync("image/png")
     const bufferData = await croppedData.getBufferAsync("image/png")
     const texto = await worker.recognize(buffer)
