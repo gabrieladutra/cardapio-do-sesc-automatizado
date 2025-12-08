@@ -43,7 +43,9 @@ async function findMenu(menus) {
     return menuAtualizado;
 }
 
-async function sendMessage(mensagem) {
+async function 
+
+sendMessage(mensagem) {
     await sns.send(new PublishCommand({
         TopicArn: "arn:aws:sns:sa-east-1:924568413237:menuSMS",
         Message: mensagem
