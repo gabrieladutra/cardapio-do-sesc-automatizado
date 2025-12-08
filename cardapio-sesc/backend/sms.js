@@ -82,7 +82,7 @@ async function handler() {
         console.log("Nenhum menu atualizado encontrado para lanchonete.");
     } else {
         if (!menuAtualizadoLan.texto || !menuAtualizadoLan.texto.S) {
-            console.log("O item de lanchonete não possui campo texto.");
+            console.log("O item de lanchonete não possui campo texto!");
         } else {
             const msgLan = `${hoje}\n${menuAtualizadoLan.texto.S}`;
             await sendMessage(msgLan);
