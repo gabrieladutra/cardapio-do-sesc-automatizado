@@ -5,6 +5,7 @@
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.946.0",
     "@aws-sdk/client-sns": "^3.943.0",
+    "date-fns": "^4.1.0",
     "jimp": "^0.16.13",
     "lucide-react": "^0.554.0",
     "node-html-parser": "^7.0.1",
