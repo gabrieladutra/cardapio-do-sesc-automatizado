@@ -3,8 +3,9 @@ import { eachDayOfInterval, startOfWeek, endOfWeek, addDays, parseJSON } from "d
 const client = new DynamoDBClient({ region: 'sa-east-1' });
 
 
-const teste = new Date("2025-12-03")
-const inicio = startOfWeek(teste, { weekStartsOn: 1 })
+
+export function getWeekDates(diaDaSemana){
+const inicio = startOfWeek(diaDaSemana, { weekStartsOn: 1 })
 const endDate = addDays(inicio, 4)
 
 const result = eachDayOfInterval({
@@ -33,4 +34,7 @@ for(let i = 0; i < result.length; i++){
     arrayFormatado.push(`${dia}/${mes}/${ano}`)
   
 }
-console.log(arrayFormatado)
+ return arrayFormatado
+}
+
+getWeekDates('2025-12-04')
