@@ -1,11 +1,11 @@
 import { DynamoDBClient, QueryCommand } from '@aws-sdk/client-dynamodb';
 import { eachDayOfInterval, startOfWeek, endOfWeek, addDays, parseJSON } from "date-fns";
-const client = new DynamoDBClient({ region: 'sa-east-1' });
+import { getTodayBR } from './dailyMenu';
+const dynamo = new DynamoDBClient({ region: 'sa-east-1' });
 
-
-
-export function getWeekDates(diaDaSemana){
-const inicio = startOfWeek(diaDaSemana, { weekStartsOn: 1 })
+async function getWeekDates(){
+const hoje = new Date()
+const inicio = startOfWeek(hoje, { weekStartsOn: 1 })
 const endDate = addDays(inicio, 4)
 
 const result = eachDayOfInterval({
@@ -15,11 +15,6 @@ const result = eachDayOfInterval({
 
 const arrayFormatado = []
 
-// for(let i = 0; i < result.length; i++){
-//   const dataFormatada = result[i].toISOString().substring(0,10).replaceAll("-","/")
-//     arrayFormatado.push(dataFormatada)
-  
-// }
 for(let i = 0; i < result.length; i++){
   const dataFormatada = result[i]
    let dia = dataFormatada.getDate()
@@ -37,4 +32,31 @@ for(let i = 0; i < result.length; i++){
  return arrayFormatado
 }
 
-getWeekDates('2025-12-04')
+async function getMenuOfTheDayList(tableName, date) {
+    const params = {
+        TableName: tableName,
+        KeyConditionExpression: "#d = :d",
+        ExpressionAttributeNames: { "#d": "data" },
+        ExpressionAttributeValues: { ":d": { S: String(date).trim() } },
+        ConsistentRead: true,
+    };
+
+    const data = await dynamo.send(new QueryCommand(params));
+    if (!data.Items || data.Items.length === 0) {
+        console.log(`Nenhum item encontrado na tabela ${tableName} para a data:`, date);
+        return [];
+    }
+
+    return data.Items;
+}
+
+
+
+export default async function handler(){
+  const hoje = new Date()
+ 
+const a = await getMenuOfTheDayList('menu',getWeekDates()[0])
+console.log(getTodayBR)
+}
+
+handler()
