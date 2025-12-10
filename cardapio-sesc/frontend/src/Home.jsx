@@ -1,9 +1,9 @@
 import { CircleChevronRight } from "lucide-react";
-import { data, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 
 export default function Home() {
-  
   const [menuRestaurante, setMenuRestaurante] = useState("");
   const [menuLanchonete, setMenuLanchonete] = useState("");
   const navigate = useNavigate()
@@ -14,8 +14,8 @@ export default function Home() {
       const response = await fetch(url);
       const dados = await response.json();
 
-      setMenuRestaurante(dados.restaurante || "Erro")
-      setMenuLanchonete(dados.lanchonete|| "Erro")
+      setMenuRestaurante(dados.restaurante)
+      setMenuLanchonete(dados.lanchonete)
   }
   fetchMenu();
 }, []);
@@ -27,14 +27,14 @@ export default function Home() {
       <div className="flex flex-col md:flex-row  gap-8 mt-8 items-center"> 
         <div className="flex flex-col items-center">
           <h2 className="text-blue-950 font-semibold text-center mb-2 md:text-2xl">Restaurante</h2>
-          <div className="border-2 border-blue-950 rounded-md p-4 w-40 md:p-2 md:pt-10 md:w-80 md:h-80  whitespace-pre-line text-center md:text-2xl">
+          <div className="border-2 border-blue-950 rounded-md p-4 w-40 md:p-2 md:pt-10 md:w-80 md:h-80  whitespace-pre-line text-center md:text-lg">
             {menuRestaurante}
           </div>
         </div>
 
         <div className="flex flex-col items-center">
           <h2 className="text-blue-950 font-semibold text-center mb-2 md:text-2xl">Lanchonete</h2>
-          <div className="border-2 border-blue-950 rounded-md p-4 md:p-2 md:pt-10 w-40 md:w-80 md:h-80 whitespace-pre-line text-center md:text-2xl">
+          <div className="border-2 border-blue-950 rounded-md p-4 md:p-2 md:pt-10 w-40 md:w-80 md:h-80 whitespace-pre-line text-center md:text-lg">
             {menuLanchonete}
           </div>
         </div>
