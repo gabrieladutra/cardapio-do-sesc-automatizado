@@ -1,35 +1,25 @@
 import { CircleChevronRight } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { data, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 export default function Home() {
-  const [menuRestaurante, setMenuRestaurante] = useState("Carregando...");
-  const [menuLanchonete, setMenuLanchonete] = useState("Carregando...");
+  
+  const [menuRestaurante, setMenuRestaurante] = useState("");
+  const [menuLanchonete, setMenuLanchonete] = useState("");
 
   useEffect(() => {
   async function fetchMenu() {
-    try {
-      const url = "https://wjvt3d5qwbxlh425nqc6pgnd3a0ybfyi.lambda-url.sa-east-1.on.aws/"
-      const res = await fetch(url);
-      const data = await res.json();
+      const cors = require('cors');
+      app.use(cors())
+      const urlRes = "https://wjvt3d5qwbxlh425nqc6pgnd3a0ybfyi.lambda-url.sa-east-1.on.aws/"
+      const responseRes = await fetch(urlRes);
+      const dataRes = await responseRes.json();
 
-      setMenuRestaurante(data.restaurante ?? "Não disponível");
-      setMenuLanchonete(data.lanchonete ?? "Não disponível");
-
-    } catch (e) {
-      console.error(e);
-      setMenuRestaurante("Erro ao carregar");
-      setMenuLanchonete("Erro ao carregar");
-    }
+      setMenuRestaurante(dataRes.restaurante)
+      setMenuLanchonete(dataRes.lanchonete)
   }
-
   fetchMenu();
 }, []);
-
-export default function Home() {
-  const navigate = useNavigate();
-
-  let cardapio = "Strogonoff de Frango\nBatata Bolinha\nArroz e Feijão\nSaladas\nFrutas";
 
   return (
     <div className="w-full min-h-screen bg-white flex flex-col items-center">
