@@ -1,6 +1,5 @@
 import { DynamoDBClient, QueryCommand } from '@aws-sdk/client-dynamodb';
-import { eachDayOfInterval, startOfWeek, endOfWeek, addDays, parseJSON } from "date-fns";
-import { getTodayBR } from './dailyMenu.js';
+import { eachDayOfInterval, startOfWeek, addDays} from "date-fns";
 const dynamo = new DynamoDBClient({ region: 'sa-east-1' });
 
 async function getWeekDates(){
@@ -50,23 +49,34 @@ async function getMenuOfTheDayList(tableName, date) {
     return data.Items;
 }
 
+export async function getWeeklyMenu(tableName, diasDaSemana){
+ const segunda = await getMenuOfTheDayList(tableName,diasDaSemana[0])
+ const terca = await getMenuOfTheDayList(tableName,diasDaSemana[1])
+ const quarta = await getMenuOfTheDayList(tableName,diasDaSemana[2])
+ const quinta = await getMenuOfTheDayList(tableName,diasDaSemana[3])
+ const sexta = await getMenuOfTheDayList(tableName,diasDaSemana[4])
 
-
-export default async function handler(){
-  const diasDaSemana = await getWeekDates()
-  const hoje = getTodayBR()
-  let date = ""
-  for(let i = 0; i< diasDaSemana.length; i++){
-    if(hoje == diasDaSemana[i]){
-      date = hoje
-      break;
-    }
-  }
- 
-const segunda = await getMenuOfTheDayList('menu',diasDaSemana[0])
-const terca = await getMenuOfTheDayList('menu',diasDaSemana[1])
-console.log(segunda)
-console.log(terca)
+ return [segunda,terca,quarta,quinta,sexta]
 }
 
-handler()
+export async function getWeeklyMenuRest(semana){
+ const menuRestaurante = await getWeeklyMenu('menu', semana);
+ return menuRestaurante
+}
+export async function getWeeklyMenuLan(){
+const menuLanchonete = await getWeeklyMenu('lanchonete', semana);
+return menuLanchonete
+}
+
+export default async function handler(semana){
+const semana = await getWeekDates()
+const restMenu = getWeeklyMenuRest(semana)
+const lanMenu = getWeeklyMenuLan(semana)
+
+
+   return {
+        restaurante: restMenu,
+        lanchonete: lanMenu
+    };
+}
+//handler()
