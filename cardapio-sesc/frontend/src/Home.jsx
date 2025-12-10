@@ -6,15 +6,16 @@ export default function Home() {
   
   const [menuRestaurante, setMenuRestaurante] = useState("");
   const [menuLanchonete, setMenuLanchonete] = useState("");
+  const navigate = useNavigate()
 
   useEffect(() => {
   async function fetchMenu() {
-      const urlRes = "https://wjvt3d5qwbxlh425nqc6pgnd3a0ybfyi.lambda-url.sa-east-1.on.aws/"
-      const responseRes = await fetch(urlRes);
-      const dataRes = await responseRes.json();
+      const url= "https://wjvt3d5qwbxlh425nqc6pgnd3a0ybfyi.lambda-url.sa-east-1.on.aws/"
+      const response = await fetch(url);
+      const dados = await response.json();
 
-      setMenuRestaurante(dataRes.restaurante)
-      setMenuLanchonete(dataRes.lanchonete)
+      setMenuRestaurante(dados.restaurante || "Erro")
+      setMenuLanchonete(dados.lanchonete|| "Erro")
   }
   fetchMenu();
 }, []);

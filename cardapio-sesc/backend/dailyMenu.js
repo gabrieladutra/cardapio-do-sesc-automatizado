@@ -89,8 +89,8 @@ export default async function handler(){
       "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
     },
     body: JSON.stringify({
-      restaurante: restMenu,
-      lanchonete: lanMenu
+      restaurante: restMsg,
+      lanchonete: lanMsg
     }),
   };
 };
