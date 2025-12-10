@@ -1,5 +1,30 @@
 import { CircleChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+
+export default function Home() {
+  const [menuRestaurante, setMenuRestaurante] = useState("Carregando...");
+  const [menuLanchonete, setMenuLanchonete] = useState("Carregando...");
+
+  useEffect(() => {
+  async function fetchMenu() {
+    try {
+      const url = "https://wjvt3d5qwbxlh425nqc6pgnd3a0ybfyi.lambda-url.sa-east-1.on.aws/"
+      const res = await fetch(url);
+      const data = await res.json();
+
+      setMenuRestaurante(data.restaurante ?? "Não disponível");
+      setMenuLanchonete(data.lanchonete ?? "Não disponível");
+
+    } catch (e) {
+      console.error(e);
+      setMenuRestaurante("Erro ao carregar");
+      setMenuLanchonete("Erro ao carregar");
+    }
+  }
+
+  fetchMenu();
+}, []);
 
 export default function Home() {
   const navigate = useNavigate();
@@ -14,14 +39,14 @@ export default function Home() {
         <div className="flex flex-col items-center">
           <h2 className="text-blue-950 font-semibold text-center mb-2 md:text-2xl">Restaurante</h2>
           <div className="border-2 border-blue-950 rounded-md p-4 w-40 md:p-2 md:pt-10 md:w-80 md:h-80  whitespace-pre-line text-center md:text-2xl">
-            {cardapio}
+            {menuRestaurante}
           </div>
         </div>
 
         <div className="flex flex-col items-center">
           <h2 className="text-blue-950 font-semibold text-center mb-2 md:text-2xl">Lanchonete</h2>
           <div className="border-2 border-blue-950 rounded-md p-4 md:p-2 md:pt-10 w-40 md:w-80 md:h-80 whitespace-pre-line text-center md:text-2xl">
-                {cardapio}
+            {menuLanchonete}
           </div>
         </div>
 

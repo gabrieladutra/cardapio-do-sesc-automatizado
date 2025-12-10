@@ -62,7 +62,7 @@ export async function getWeeklyMenu(tableName, diasDaSemana){
 export async function getWeeklyMenuRest(semana){
  return await getWeeklyMenu('menu', semana);
 }
-export async function getWeeklyMenuLan(){
+export async function getWeeklyMenuLan(semana){
 return await getWeeklyMenu('lanchonete', semana);
 }
 
@@ -77,4 +77,4 @@ const lanMenu = await getWeeklyMenuLan(semana)
         lanchonete: lanMenu
     };
 }
-//handler()
+handler()
