@@ -1,6 +1,6 @@
 import { DynamoDBClient, QueryCommand } from '@aws-sdk/client-dynamodb';
 import { eachDayOfInterval, startOfWeek, endOfWeek, addDays, parseJSON } from "date-fns";
-import { getTodayBR } from './dailyMenu';
+import { getTodayBR } from './dailyMenu.js';
 const dynamo = new DynamoDBClient({ region: 'sa-east-1' });
 
 async function getWeekDates(){
@@ -53,10 +53,20 @@ async function getMenuOfTheDayList(tableName, date) {
 
 
 export default async function handler(){
-  const hoje = new Date()
+  const diasDaSemana = await getWeekDates()
+  const hoje = getTodayBR()
+  let date = ""
+  for(let i = 0; i< diasDaSemana.length; i++){
+    if(hoje == diasDaSemana[i]){
+      date = hoje
+      break;
+    }
+  }
  
-const a = await getMenuOfTheDayList('menu',getWeekDates()[0])
-console.log(getTodayBR)
+const segunda = await getMenuOfTheDayList('menu',diasDaSemana[0])
+const terca = await getMenuOfTheDayList('menu',diasDaSemana[1])
+console.log(segunda)
+console.log(terca)
 }
 
 handler()
