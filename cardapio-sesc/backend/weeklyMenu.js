@@ -2,7 +2,7 @@ import { DynamoDBClient, QueryCommand } from '@aws-sdk/client-dynamodb';
 import { eachDayOfInterval, startOfWeek, addDays} from "date-fns";
 const dynamo = new DynamoDBClient({ region: 'sa-east-1' });
 
-async function getWeekDates(){
+export async function getWeekDates(){
 const hoje = new Date()
 const inicio = startOfWeek(hoje, { weekStartsOn: 1 })
 const endDate = addDays(inicio, 4)
@@ -31,7 +31,7 @@ for(let i = 0; i < result.length; i++){
  return arrayFormatado
 }
 
-async function getMenuOfTheDayList(tableName, date) {
+export async function getMenuOfTheDayList(tableName, date) {
     const params = {
         TableName: tableName,
         KeyConditionExpression: "#d = :d",
@@ -60,18 +60,16 @@ export async function getWeeklyMenu(tableName, diasDaSemana){
 }
 
 export async function getWeeklyMenuRest(semana){
- const menuRestaurante = await getWeeklyMenu('menu', semana);
- return menuRestaurante
+ return await getWeeklyMenu('menu', semana);
 }
 export async function getWeeklyMenuLan(){
-const menuLanchonete = await getWeeklyMenu('lanchonete', semana);
-return menuLanchonete
+return await getWeeklyMenu('lanchonete', semana);
 }
 
-export default async function handler(semana){
+export default async function handler(){
 const semana = await getWeekDates()
-const restMenu = getWeeklyMenuRest(semana)
-const lanMenu = getWeeklyMenuLan(semana)
+const restMenu = await getWeeklyMenuRest(semana)
+const lanMenu = await getWeeklyMenuLan(semana)
 
 
    return {
