@@ -9,8 +9,6 @@ export default function Home() {
 
   useEffect(() => {
   async function fetchMenu() {
-      const cors = require('cors');
-      app.use(cors())
       const urlRes = "https://wjvt3d5qwbxlh425nqc6pgnd3a0ybfyi.lambda-url.sa-east-1.on.aws/"
       const responseRes = await fetch(urlRes);
       const dataRes = await responseRes.json();

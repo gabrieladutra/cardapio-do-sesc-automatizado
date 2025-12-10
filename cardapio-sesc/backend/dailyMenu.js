@@ -82,9 +82,18 @@ export default async function handler(){
     const lanMsg = await getLanMessage();
 
     return {
-        restaurante: restMsg,
-        lanchonete: lanMsg
-    };
-}
+    statusCode: 200,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Headers": "*",
+      "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
+    },
+    body: JSON.stringify({
+      restaurante: restMenu,
+      lanchonete: lanMenu
+    }),
+  };
+};
+
 
 //handler()
