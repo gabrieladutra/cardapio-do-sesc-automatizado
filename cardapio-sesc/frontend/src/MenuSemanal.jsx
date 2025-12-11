@@ -3,8 +3,20 @@ import { useNavigate } from "react-router-dom";
     import { useEffect, useState } from "react";
 
 export default function MenuSemanal() {
-    const [menuRestaurante, setMenuRestaurante] = useState("");
-    const [menuLanchonete, setMenuLanchonete] = useState("");
+    const [menuRestauranteSeg, setMenuRestauranteSeg] = useState("");
+     const [menuRestauranteTer, setMenuRestauranteTer] = useState("");
+     const [menuRestauranteQua, setMenuRestauranteQua] = useState("");
+     const [menuRestauranteQui, setMenuRestauranteQui] = useState("");
+     const [menuRestauranteSext, setMenuRestauranteSext] = useState("");
+
+    
+    const [menuLanchoneteSeg, setMenuLanchoneteSeg] = useState("");
+     const [menuLanchoneteTer, setMenuLanchoneteTer] = useState("");
+     const [menuLanchoneteQua, setMenuLanchoneteQua] = useState("");
+     const [menuLanchoneteQui, setMenuLanchoneteQui] = useState("");
+     const [menuLanchoneteSext, setMenuLanchoneteSext] = useState("");
+
+
     const navigate = useNavigate()
     
     useEffect(() => {
@@ -13,8 +25,17 @@ export default function MenuSemanal() {
         const response = await fetch(url);
         const dados = await response.json();
     
-        setMenuRestaurante(dados.restaurante[0][0].texto.S);
-        setMenuLanchonete(dados.lanchonete[0][0].texto.S);
+        setMenuRestauranteSeg(dados.restaurante[0][0].texto.S);
+        setMenuRestauranteTer(dados.restaurante[1][0].texto.S);
+        setMenuRestauranteQua(dados.restaurante[2][0].texto.S);
+        setMenuRestauranteQui(dados.restaurante[3][0].texto.S);
+        setMenuRestauranteSext(dados.restaurante[4][0].texto.S)
+
+        setMenuLanchoneteSeg(dados.lanchonete[0][0].texto.S);
+        setMenuLanchoneteTer(dados.lanchonete[1][0].texto.S);
+        setMenuLanchoneteQua(dados.lanchonete[2][0].texto.S);
+        setMenuLanchoneteQui(dados.lanchonete[3][0].texto.S);
+        setMenuLanchoneteSext(dados.lanchonete[4][0].texto.S)
 }
     fetchMenu();
 }, []);
@@ -30,39 +51,51 @@ export default function MenuSemanal() {
 
                 <div className="flex flex-col items-center">
                     <h2 className="text-blue-950 font-semibold mb-2 text-center md:text-lg">Segunda-feira</h2>
-                    <div className="border-2 border-blue-950 rounded-md p-2 w-40 whitespace-pre-line text-center md:h-70 md:w-40 md:text-md">
-                        {menuRestaurante}
+                    <div className="border-2 border-blue-950 rounded-md p-2 w-40 whitespace-pre-line text-center md:h-70 md:w-45 md:text-md">
+                        {menuRestauranteSeg}
                     </div>
-                    <div className="border-2 border-blue-950 rounded-md p-2 mt-8 w-40 whitespace-pre-line text-center md:h-70 md:w-40 md:text-md">
-                        {menuRestaurante}
+                    <div className="border-2 border-blue-950 rounded-md p-2 mt-8 w-40 whitespace-pre-line text-center md:h-70 md:w-45 md:text-md">
+                        {menuLanchoneteSeg}
                     </div>
                 </div>
 
                 <div className="flex flex-col items-center">
                     <h2 className="text-blue-950 font-semibold mb-2 text-center md:text-lg">Terça-feira</h2>
-                    <div className="border-2 border-blue-950 rounded-md p-4 w-40 whitespace-pre-line text-center md:h-60 md:w-40 md:text-lg">
-                        {cardapio}
+                    <div className="border-2 border-blue-950 rounded-md p-2 w-40 whitespace-pre-line text-center md:h-70 md:w-45 md:text-md">
+                        {menuRestauranteTer}
+                    </div>
+                    <div className="border-2 border-blue-950 rounded-md p-2 mt-8 w-40 whitespace-pre-line text-center md:h-70 md:w-45 md:text-md">
+                        {menuLanchoneteTer}
                     </div>
                 </div>
 
                 <div className="flex flex-col items-center">
                     <h2 className="text-blue-950 font-semibold mb-2 text-center md:text-lg">Quarta-feira</h2>
-                    <div className="border-2 border-blue-950 rounded-md p-4 w-40 whitespace-pre-line text-center md:h-60 md:w-40 md:text-lg">
-                        {cardapio}
+                    <div className="border-2 border-blue-950 rounded-md p-2 w-40 whitespace-pre-line text-center md:h-70 md:w-45 md:text-md">
+                    {menuRestauranteQua}
+                    </div>
+                    <div className="border-2 border-blue-950 rounded-md p-2 mt-8 w-40 whitespace-pre-line text-center md:h-70 md:w-45 md:text-md">
+                        {menuLanchoneteQua}
                     </div>
                 </div>
 
                 <div className="flex flex-col items-center">
                     <h2 className="text-blue-950 font-semibold mb-2 text-center md:text-lg">Quinta-feira</h2>
-                    <div className="border-2 border-blue-950 rounded-md p-4 w-40 whitespace-pre-line text-center md:h-60 md:w-40 md:text-lg">
-                        {cardapio}
+                    <div className="border-2 border-blue-950 rounded-md p-2 w-40 whitespace-pre-line text-center md:h-70 md:w-45 md:text-md">
+                    {menuRestauranteQui}
+                    </div>
+                    <div className="border-2 border-blue-950 rounded-md p-2 mt-8 w-40 whitespace-pre-line text-center md:h-70 md:w-45 md:text-md">
+                        {menuLanchoneteQui}
                     </div>
                 </div>
 
                 <div className="flex flex-col items-center">
                     <h2 className="text-blue-950 font-semibold mb-2 text-center md:text-lg">Sexta-feira</h2>
-                    <div className="border-2 border-blue-950 rounded-md p-4 w-40 whitespace-pre-line text-center md:h-60 md:w-40 md:text-lg">
-                        {cardapio}
+                    <div className="border-2 border-blue-950 rounded-md p-2 w-40 whitespace-pre-line text-center md:h-70 md:w-45 md:text-md">
+                        {menuRestauranteSext}
+                    </div>
+                    <div className="border-2 border-blue-950 rounded-md p-2 mt-8 w-40 whitespace-pre-line text-center md:h-70 md:w-45 md:text-md">
+                        {menuLanchoneteSext}
                     </div>
                 </div>
             </div>
