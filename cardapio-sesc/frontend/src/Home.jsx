@@ -1,4 +1,4 @@
-import { CircleChevronRight, Loader } from "lucide-react"
+import { CircleChevronRight, LoaderCircle, Loader } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
@@ -30,15 +30,15 @@ export default function Home() {
 
       <div className="flex flex-col md:flex-row gap-3 md:gap-8 mt-2 md:mt-10 "> 
         <div className="flex flex-col items-center">
-          <h2 className="text-blue-950 font-semibold text-center pt-0 md:text-2xl">Restaurante</h2>
+          <h2 className="text-blue-950 font-semibold text-center md:text-2xl">Restaurante</h2>
           <div className="border-2 border-blue-950 rounded-md w-40 md:w-70 md:h-67 whitespace-pre-line text-center md:text-lg">
-            {loading ? <Loader className="animate-spin"/>: menuRestaurante.substring(10)}
+            {loading ? <Loader strokeWidth={0.75} size="32"className="md:w-15 md:h-15 mt-10 ml-10 md:mt-20 md:ml-28 md:mr-30 animate-spin [animation-duration:5s] text-gray-400 "/>: menuRestaurante.substring(10)}
           </div>
         </div>
         <div className="flex flex-col items-center">
           <h2 className="text-blue-950 font-semibold text-center md:text-2xl">Lanchonete</h2>
-          <div className="border-2 border-blue-950 rounded-md w-40 h-40 md:w-70 md:h-67 whitespace-pre-line text-center md:text-lg">
-            {loading ? <Loader className="animate-spin"/>: menuLanchonete.substring(10)}
+          <div className="border-2 border-blue-950 rounded-md w-40 md:w-70 md:h-67 whitespace-pre-line text-center md:text-lg">
+            {loading ? <Loader strokeWidth={0.75} size="32"className="md:w-15 md:h-15 mt-10 ml-10 md:mt-20 md:ml-28 md:mr-30 animate-spin [animation-duration:5s] text-gray-400 "/>: menuLanchonete.substring(10)}
           </div>
         </div>
 
