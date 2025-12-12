@@ -23,19 +23,20 @@ export default function Home() {
   return (
     <div className="w-full min-h-screen bg-white flex flex-col items-center">
       <h1 className="text-yellow-600 text-3xl md:text-4xl mt-4">MENU DIÁRIO</h1>
+      <h1 className="text-yellow-800 text-lg semibold md:text-2xl mt-4">{menuRestaurante.substring(0,10)}</h1>
 
-      <div className="flex flex-col md:flex-row  gap-8 mt-8 items-center"> 
+      <div className="flex flex-col md:flex-row  gap-8 mt-10 items-center"> 
         <div className="flex flex-col items-center">
           <h2 className="text-blue-950 font-semibold text-center mb-2 md:text-2xl">Restaurante</h2>
-          <div className="border-2 border-blue-950 rounded-md p-4 w-40 md:p-2 md:pt-10 md:w-80 md:h-80  whitespace-pre-line text-center md:text-lg">
-            {menuRestaurante}
+          <div className="border-2 border-blue-950 rounded-md p-4 w-40 md:p-2 md:pt-3 md:w-70 md:h-70  whitespace-pre-line text-center md:text-lg">
+            {menuRestaurante.substring(10)}
           </div>
         </div>
 
         <div className="flex flex-col items-center">
           <h2 className="text-blue-950 font-semibold text-center mb-2 md:text-2xl">Lanchonete</h2>
-          <div className="border-2 border-blue-950 rounded-md p-4 md:p-2 md:pt-10 w-40 md:w-80 md:h-80 whitespace-pre-line text-center md:text-lg">
-            {menuLanchonete}
+          <div className="border-2 border-blue-950 rounded-md p-4 md:p-2 md:pt-3 w-40 md:w-70 md:h-70 whitespace-pre-line text-center md:text-lg">
+            {menuLanchonete.substring(10)}
           </div>
         </div>
 
