@@ -12,7 +12,7 @@ export default function Home() {
   useEffect(() => {
   async function fetchMenu() {
       const url= "https://wjvt3d5qwbxlh425nqc6pgnd3a0ybfyi.lambda-url.sa-east-1.on.aws/"
-      await new Promise(resolve => setTimeout(resolve, 10 * 1000))
+      // await new Promise(resolve => setTimeout(resolve, 10 * 1000))
       const response = await fetch(url)
       setLoading(false)
       const dados = await response.json()

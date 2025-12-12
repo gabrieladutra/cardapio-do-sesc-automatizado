@@ -1,9 +1,9 @@
-import { CircleArrowLeft, LucideClockFading } from "lucide-react"
+import { CircleArrowLeft, Loader } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react"
 
 export default function MenuSemanal() {
-    const [loading,setLoading] = useState(true)
+    const [loading, setLoading] = useState(true)
     const [menuRestauranteSeg, setMenuRestauranteSeg] = useState("")
     const [menuRestauranteTer, setMenuRestauranteTer] = useState("")
     const [menuRestauranteQua, setMenuRestauranteQua] = useState("")
@@ -21,6 +21,7 @@ export default function MenuSemanal() {
     useEffect(() => {
         async function fetchMenu() {
             const url = "https://nzn6ek54m6mq2asfgmogtrn3uy0eynrj.lambda-url.sa-east-1.on.aws/"
+            //await new Promise(resolve => setTimeout(resolve, 10 * 1000))
             const response = await fetch(url)
             setLoading(false)
             const dados = await response.json()
@@ -42,7 +43,7 @@ export default function MenuSemanal() {
 
     return (
         <div className="w-full min-h-screen bg-white flex flex-col items-center">
-            
+
             <h1 className="text-yellow-600 text-4xl mt-3 mb-0 p-0">MENU SEMANAL</h1>
 
             <h2 className="text-yellow-600 text-2xl mt-3">Restaurante</h2>
@@ -51,35 +52,36 @@ export default function MenuSemanal() {
                 <div className="text-center">
                     <p className="font-semibold text-blue-950">Segunda</p>
                     <div className="border-2 border-blue-950 pt-3 px-2 w-48 h-65 whitespace-pre-line rounded-md">
-                        {loading ? "Carregando": menuRestauranteSeg}
+                        {loading ? <Loader strokeWidth={0.75} size="32" className="md:w-15 md:h-15 mt-20 ml-15 md:mt-16 md:ml-16 md:mr-30 animate-spin [animation-duration:5s] text-gray-400 " /> : menuRestauranteSeg}
                     </div>
                 </div>
 
                 <div className="text-center">
                     <p className="font-semibold text-blue-950">Terça</p>
                     <div className="border-2 border-blue-950 pt-3 px-2 w-48 h-65 whitespace-pre-line rounded-md">
-                        {menuRestauranteTer}
+                        {loading ? <Loader strokeWidth={0.75} size="32" className="md:w-15 md:h-15 mt-20 md:mt-16 ml-15 md:ml-16 md:mr-30 animate-spin [animation-duration:5s] text-gray-400 " /> : menuRestauranteTer}
+
                     </div>
                 </div>
 
                 <div className="text-center">
                     <p className="font-semibold text-blue-950">Quarta</p>
                     <div className="border-2 border-blue-950 pt-3 px-2 w-48 h-65 whitespace-pre-line rounded-md">
-                        {menuRestauranteQua}
+                        {loading ? <Loader strokeWidth={0.75} size="32" className="md:w-15 md:h-15 mt-20 md:mt-16 ml-15 md:ml-16 md:mr-30 animate-spin [animation-duration:5s] text-gray-400 " /> : menuRestauranteQua}
                     </div>
                 </div>
 
                 <div className="text-center">
                     <p className="font-semibold text-blue-950">Quinta</p>
                     <div className="border-2 border-blue-950 pt-3 px-2 w-48 h-65 whitespace-pre-line rounded-md">
-                        {menuRestauranteQui}
+                        {loading ? <Loader strokeWidth={0.75} size="32" className="md:w-15 md:h-15 mt-20 md:mt-16 ml-15 md:ml-16 md:mr-30 animate-spin [animation-duration:5s] text-gray-400 " /> : menuRestauranteQui}
                     </div>
                 </div>
 
                 <div className="text-center">
                     <p className="font-semibold text-blue-950">Sexta</p>
                     <div className="border-2 border-blue-950 pt-3 px-2 w-48 h-65 whitespace-pre-line rounded-md">
-                        {menuRestauranteSext}
+                        {loading ? <Loader strokeWidth={0.75} size="32"className="md:w-15 md:h-15 mt-20 md:mt-16 ml-15 md:ml-16 md:mr-30 animate-spin [animation-duration:5s] text-gray-400 "/>: menuRestauranteSext}
                     </div>
                 </div>
             </div>
@@ -90,35 +92,38 @@ export default function MenuSemanal() {
                 <div className="text-center">
                     <p className="font-semibold text-blue-950">Segunda</p>
                     <div className="border-2 border-blue-950 pt-3 px-2 w-48 h-65 whitespace-pre-line rounded-md">
-                        {menuLanchoneteSeg}
+                      {loading ? <Loader strokeWidth={0.75} size="32" className="md:w-15 md:h-15 mt-20 md:mt-16 ml-15 md:ml-16 md:mr-30 animate-spin [animation-duration:5s] text-gray-400 " /> : menuLanchoneteSeg}
+
                     </div>
                 </div>
 
                 <div className="text-center">
                     <p className="font-semibold text-blue-950">Terça</p>
                     <div className="border-2 border-blue-950 pt-3 px-2 w-48 h-65 whitespace-pre-line rounded-md">
-                        {menuLanchoneteTer}
+                     {loading ? <Loader strokeWidth={0.75} size="32" className="md:w-15 md:h-15 mt-20 md:mt-16 ml-15 md:ml-16 md:mr-30 animate-spin [animation-duration:5s] text-gray-400 " /> : menuLanchoneteTer}
+                       
                     </div>
                 </div>
 
                 <div className="text-center">
                     <p className="font-semibold text-blue-950">Quarta</p>
                     <div className="border-2 border-blue-950 pt-3 px-2 w-48 h-65 whitespace-pre-line rounded-md">
-                        {menuLanchoneteQua}
+                     {loading ? <Loader strokeWidth={0.75} size="32" className="md:w-15 md:h-15 mt-20 md:mt-16 ml-15 md:ml-16 md:mr-30 animate-spin [animation-duration:5s] text-gray-400 " /> : menuLanchoneteQua}
+                        
                     </div>
                 </div>
 
                 <div className="text-center">
                     <p className="font-semibold text-blue-950">Quinta</p>
                     <div className="border-2 border-blue-950 pt-3 px-2 w-48 h-65 whitespace-pre-line rounded-md">
-                        {menuLanchoneteQui}
+                     {loading ? <Loader strokeWidth={0.75} size="32" className="md:w-15 md:h-15 mt-20 md:mt-16 ml-15 md:ml-16 md:mr-30 animate-spin [animation-duration:5s] text-gray-400 " /> : menuLanchoneteQui}
                     </div>
                 </div>
 
                 <div className="text-center">
                     <p className="font-semibold text-blue-950">Sexta</p>
                     <div className="border-2 border-blue-950 pt-3 px-2 w-48 h-65 whitespace-pre-line rounded-md">
-                        {menuLanchoneteSext}
+                     {loading ? <Loader strokeWidth={0.75} size="32" className="md:w-15 md:h-15 mt-20 md:mt-16 ml-15 md:ml-16 md:mr-30 animate-spin [animation-duration:5s] text-gray-400 " /> : menuLanchoneteSext}
                     </div>
                 </div>
             </div>
