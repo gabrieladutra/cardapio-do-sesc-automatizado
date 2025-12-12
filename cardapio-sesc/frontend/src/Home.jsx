@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom"
 
 
 export default function Home() {
+  const [loading,setLoading] = useState(true)
   const [menuRestaurante, setMenuRestaurante] = useState("")
   const [menuLanchonete, setMenuLanchonete] = useState("")
   const navigate = useNavigate()
@@ -11,7 +12,9 @@ export default function Home() {
   useEffect(() => {
   async function fetchMenu() {
       const url= "https://wjvt3d5qwbxlh425nqc6pgnd3a0ybfyi.lambda-url.sa-east-1.on.aws/"
+      // await new Promise(resolve => setTimeout(resolve, 10 * 1000))
       const response = await fetch(url)
+      setLoading(false)
       const dados = await response.json()
 
       setMenuRestaurante(dados.restaurante)
@@ -29,13 +32,13 @@ export default function Home() {
         <div className="flex flex-col items-center">
           <h2 className="text-blue-950 font-semibold text-center pt-0 md:text-2xl">Restaurante</h2>
           <div className="border-2 border-blue-950 rounded-md w-40 md:w-70 md:h-67 whitespace-pre-line text-center md:text-lg">
-            {menuRestaurante.substring(10)}
+            {loading ? "Carregando": menuRestaurante.substring(10)}
           </div>
         </div>
         <div className="flex flex-col items-center">
           <h2 className="text-blue-950 font-semibold text-center md:text-2xl">Lanchonete</h2>
           <div className="border-2 border-blue-950 rounded-md w-40 h-40 md:w-70 md:h-67 whitespace-pre-line text-center md:text-lg">
-            {menuLanchonete.substring(10)}
+            {loading ? "Carregando": menuLanchonete.substring(10)}
           </div>
         </div>
 

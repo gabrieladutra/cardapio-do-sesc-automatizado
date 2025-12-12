@@ -22,6 +22,7 @@ export default function MenuSemanal() {
         async function fetchMenu() {
             const url = "https://nzn6ek54m6mq2asfgmogtrn3uy0eynrj.lambda-url.sa-east-1.on.aws/"
             const response = await fetch(url)
+            setLoading(false)
             const dados = await response.json()
 
             setMenuRestauranteSeg(dados.restaurante[0][0].texto.S)
@@ -50,7 +51,7 @@ export default function MenuSemanal() {
                 <div className="text-center">
                     <p className="font-semibold text-blue-950">Segunda</p>
                     <div className="border-2 border-blue-950 pt-3 px-2 w-48 h-65 whitespace-pre-line rounded-md">
-                        {menuRestauranteSeg}
+                        {loading ? "Carregando": menuRestauranteSeg}
                     </div>
                 </div>
 
