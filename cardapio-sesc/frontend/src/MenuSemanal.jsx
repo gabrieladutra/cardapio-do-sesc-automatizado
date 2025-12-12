@@ -1,42 +1,43 @@
-import { CircleArrowLeft } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { CircleArrowLeft, LucideClockFading } from "lucide-react"
+import { useNavigate } from "react-router-dom"
+import { useEffect, useState } from "react"
 
 export default function MenuSemanal() {
-    const [menuRestauranteSeg, setMenuRestauranteSeg] = useState("");
-    const [menuRestauranteTer, setMenuRestauranteTer] = useState("");
-    const [menuRestauranteQua, setMenuRestauranteQua] = useState("");
-    const [menuRestauranteQui, setMenuRestauranteQui] = useState("");
-    const [menuRestauranteSext, setMenuRestauranteSext] = useState("");
+    const [loading,setLoading] = useState(true)
+    const [menuRestauranteSeg, setMenuRestauranteSeg] = useState("")
+    const [menuRestauranteTer, setMenuRestauranteTer] = useState("")
+    const [menuRestauranteQua, setMenuRestauranteQua] = useState("")
+    const [menuRestauranteQui, setMenuRestauranteQui] = useState("")
+    const [menuRestauranteSext, setMenuRestauranteSext] = useState("")
 
-    const [menuLanchoneteSeg, setMenuLanchoneteSeg] = useState("");
-    const [menuLanchoneteTer, setMenuLanchoneteTer] = useState("");
-    const [menuLanchoneteQua, setMenuLanchoneteQua] = useState("");
-    const [menuLanchoneteQui, setMenuLanchoneteQui] = useState("");
-    const [menuLanchoneteSext, setMenuLanchoneteSext] = useState("");
+    const [menuLanchoneteSeg, setMenuLanchoneteSeg] = useState("")
+    const [menuLanchoneteTer, setMenuLanchoneteTer] = useState("")
+    const [menuLanchoneteQua, setMenuLanchoneteQua] = useState("")
+    const [menuLanchoneteQui, setMenuLanchoneteQui] = useState("")
+    const [menuLanchoneteSext, setMenuLanchoneteSext] = useState("")
 
-    const navigate = useNavigate();
+    const navigate = useNavigate()
 
     useEffect(() => {
         async function fetchMenu() {
-            const url = "https://nzn6ek54m6mq2asfgmogtrn3uy0eynrj.lambda-url.sa-east-1.on.aws/";
-            const response = await fetch(url);
-            const dados = await response.json();
+            const url = "https://nzn6ek54m6mq2asfgmogtrn3uy0eynrj.lambda-url.sa-east-1.on.aws/"
+            const response = await fetch(url)
+            const dados = await response.json()
 
-            setMenuRestauranteSeg(dados.restaurante[0][0].texto.S);
-            setMenuRestauranteTer(dados.restaurante[1][0].texto.S);
-            setMenuRestauranteQua(dados.restaurante[2][0].texto.S);
-            setMenuRestauranteQui(dados.restaurante[3][0].texto.S);
-            setMenuRestauranteSext(dados.restaurante[4][0].texto.S);
+            setMenuRestauranteSeg(dados.restaurante[0][0].texto.S)
+            setMenuRestauranteTer(dados.restaurante[1][0].texto.S)
+            setMenuRestauranteQua(dados.restaurante[2][0].texto.S)
+            setMenuRestauranteQui(dados.restaurante[3][0].texto.S)
+            setMenuRestauranteSext(dados.restaurante[4][0].texto.S)
 
-            setMenuLanchoneteSeg(dados.lanchonete[0][0].texto.S);
-            setMenuLanchoneteTer(dados.lanchonete[1][0].texto.S);
-            setMenuLanchoneteQua(dados.lanchonete[2][0].texto.S);
-            setMenuLanchoneteQui(dados.lanchonete[3][0].texto.S);
-            setMenuLanchoneteSext(dados.lanchonete[4][0].texto.S);
+            setMenuLanchoneteSeg(dados.lanchonete[0][0].texto.S)
+            setMenuLanchoneteTer(dados.lanchonete[1][0].texto.S)
+            setMenuLanchoneteQua(dados.lanchonete[2][0].texto.S)
+            setMenuLanchoneteQui(dados.lanchonete[3][0].texto.S)
+            setMenuLanchoneteSext(dados.lanchonete[4][0].texto.S)
         }
-        fetchMenu();
-    }, []);
+        fetchMenu()
+    }, [])
 
     return (
         <div className="w-full min-h-screen bg-white flex flex-col items-center">
@@ -45,7 +46,7 @@ export default function MenuSemanal() {
 
             <h2 className="text-yellow-600 text-2xl mt-3">Restaurante</h2>
 
-            <div className="flex flex-row gap-4 mt-2">
+            <div className="flex flex-col md:flex-row gap-4 mt-2">
                 <div className="text-center">
                     <p className="font-semibold text-blue-950">Segunda</p>
                     <div className="border-2 border-blue-950 pt-3 px-2 w-48 h-65 whitespace-pre-line rounded-md">
@@ -84,7 +85,7 @@ export default function MenuSemanal() {
 
             <h2 className="text-yellow-600 text-2xl mt-6">Lanchonete</h2>
 
-            <div className="flex flex-row gap-4 mt-2">
+            <div className="flex flex-col md:flex-row gap-4 mt-2">
                 <div className="text-center">
                     <p className="font-semibold text-blue-950">Segunda</p>
                     <div className="border-2 border-blue-950 pt-3 px-2 w-48 h-65 whitespace-pre-line rounded-md">
@@ -130,5 +131,5 @@ export default function MenuSemanal() {
             </button>
 
         </div>
-    );
+    )
 }
