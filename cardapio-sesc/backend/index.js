@@ -25,24 +25,22 @@ async function handler() {
     console.log("Tamanho Vazio:", emptySpaceWidth)
     console.log("Proporção: ", proportion)
 
-    
-    
+    const height = 1500 
+    const marginTop = 0 
+ 
+    const cropSegunda = image.clone().crop(emptySpaceWidth, marginTop, filledWidth, height);
+    const cropTerca = image.clone().crop((2 * emptySpaceWidth) + filledWidth, marginTop,filledWidth, height);
+    const cropQuarta = image.clone().crop((3 * emptySpaceWidth) + (2 * filledWidth) ,marginTop, filledWidth, height)
+    const cropQuinta = image.clone().crop((4 * emptySpaceWidth) + (3 * filledWidth) ,marginTop, filledWidth, height)
+    const cropSexta = image.clone().crop((5 * emptySpaceWidth) + (4 * filledWidth) ,marginTop, filledWidth, height)
+
+    await cropSegunda.writeAsync("1.jpg")
+    await cropTerca.writeAsync("2.jpg")
+    await cropQuarta.writeAsync("3.jpg")
+    await cropQuinta.writeAsync("4.jpg")
+    await cropSexta.writeAsync("5.jpg")
 }
-module.exports.handler = handler
-handler()
-   /*  const marginLeft = 56
-    const marginTop = 790
-    const height = 556
-    const width = 462
-    const gap = 33
-
-    const cropSegunda = image.clone().crop(marginLeft, marginTop, width, height);
-    const cropTerca = image.clone().crop(marginLeft + width + gap, marginTop, width, height);
-    const cropQuarta = image.clone().crop(marginLeft + (width + gap) * 2, marginTop, width, height)
-    const cropQuinta = image.clone().crop(marginLeft + (width + gap) * 3, marginTop, width, height)
-    const cropSexta = image.clone().crop(marginLeft + (width + gap) * 4, marginTop, width, height)
-
-    const dateHeight = 76
+    /* const dateHeight = 76
     const dateGap = 5
     const dateMarginTop = marginTop - dateHeight - dateGap
 
@@ -98,8 +96,9 @@ async function getText(name, cropped, croppedData) {
     console.log(`Data: ${menu.date} \n${menu.text}`);
     await worker.terminate();
     return menu
-}
-
+} */
+module.exports.handler = handler
+handler()
 
 
 async function saveToDynamoDB(menu, versao) {
@@ -138,4 +137,4 @@ async function verifyVersion(date) {
 
     return data.Items;
 
-} */
+}
