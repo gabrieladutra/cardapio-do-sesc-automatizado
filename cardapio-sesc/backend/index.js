@@ -11,8 +11,26 @@ async function handler() {
     const img = root.querySelector('.alignnone');
     const src = img.getAttribute('src');
     const image = await Jimp.read(src);
+    const imageWidth = image.bitmap.width
+    const imageHeight = image.bitmap.height
+    const squares = 5
+    const emptySpaces = 6
+    const proportion = 14.314285714
+    const totalEmpty = (squares * proportion) + emptySpaces
+    const emptySpaceWidth = (imageWidth / totalEmpty)
+    const filledWidth = emptySpaceWidth * proportion
+     
+    console.log("Largura x Altura da imagem:", imageWidth, imageHeight)
+    console.log("Tamnhano P: ", filledWidth)
+    console.log("Tamanho Vazio:", emptySpaceWidth)
+    console.log("Proporção: ", proportion)
 
-    const marginLeft = 56
+    
+    
+}
+module.exports.handler = handler
+handler()
+   /*  const marginLeft = 56
     const marginTop = 790
     const height = 556
     const width = 462
@@ -82,8 +100,7 @@ async function getText(name, cropped, croppedData) {
     return menu
 }
 
-module.exports.handler = handler
-//handler()
+
 
 async function saveToDynamoDB(menu, versao) {
     const params = {
@@ -121,4 +138,4 @@ async function verifyVersion(date) {
 
     return data.Items;
 
-}
+} */

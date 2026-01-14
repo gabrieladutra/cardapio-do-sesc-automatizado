@@ -12,7 +12,7 @@ async function handler() {
     let src = img.getAttribute('src');
     //console.log("SRC da imagem:", src);
     const image = await Jimp.read(src);
-    //console.log("Largura x Altura da imagem:", image.bitmap.width, image.bitmap.height)
+    console.log("Largura x Altura da imagem:", image.bitmap.width, image.bitmap.height)
     //08/12/2025 Laargura x Altura da imagem: 1754 1241
 
     const marginLeft = 39
@@ -88,8 +88,8 @@ async function getText(name, cropped, croppedData) {
 
 module.exports.handler = handler
 
-//handler()
-
+handler()
+/* 
 async function saveToDynamoDB(menu, versao) {
     const params = {
         TableName: 'lanchonete',
@@ -103,8 +103,8 @@ async function saveToDynamoDB(menu, versao) {
 
     await dynamo.send(new PutItemCommand(params));
     console.log('Item salvo no DynamoDB:', menu.date);
-}
-
+} */
+/* 
 async function verifyVersion(date) {
     const params = {
         TableName: "lanchonete",
@@ -125,4 +125,4 @@ async function verifyVersion(date) {
     console.log("Itens encontrados:", data.Items);
 
     return data.Items;
-}
+} */

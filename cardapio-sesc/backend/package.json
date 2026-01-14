@@ -1,7 +1,6 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "type": "module",
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.946.0",
     "@aws-sdk/client-sns": "^3.943.0",
