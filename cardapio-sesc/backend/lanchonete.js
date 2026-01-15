@@ -12,22 +12,44 @@ async function handler() {
     let src = img.getAttribute('src');
     //console.log("SRC da imagem:", src);
     const image = await Jimp.read(src);
-    console.log("Largura x Altura da imagem:", image.bitmap.width, image.bitmap.height)
-    //08/12/2025 Laargura x Altura da imagem: 1754 1241
+    const imageWidth = image.bitmap.width
+    const imageHeight = image.bitmap.height
+    const squares = 5
+    const emptySpaces = 6
+    const proportion = 14.314285714
+    const totalEmpty = (squares * proportion) + emptySpaces
+    const emptySpaceWidth = (imageWidth / totalEmpty)
+    const filledWidth = emptySpaceWidth * proportion
+    
+     
+    console.log("Largura x Altura da imagem:", imageWidth, imageHeight)
+    console.log("Tamnhano P: ", filledWidth)
+    console.log("Tamanho Vazio:", emptySpaceWidth)
+    console.log("Proporção: ", proportion)
 
-    const marginLeft = 39
-    const marginTop = 520
-    const height = 370
-    const width = 317
-    const gap = 24
+    const marginTop = imageHeight * 0.42
+    const height = imageHeight * 0.31
 
-    const cropSegunda = image.clone().crop(marginLeft, marginTop, width, height);
-    const cropTerca = image.clone().crop(marginLeft + width + gap, marginTop, width, height);
-    const cropQuarta = image.clone().crop(marginLeft + (width + gap) * 2, marginTop, width, height)
-    const cropQuinta = image.clone().crop(marginLeft + (width + gap) * 3, marginTop, width, height)
-    const cropSexta = image.clone().crop(marginLeft + (width + gap) * 4, marginTop, width, height)
+    console.log("height: ", height)
+    console.log("top:",marginTop)
+ 
+    const cropSegunda = image.clone().crop(emptySpaceWidth, marginTop, filledWidth, height);
+    const cropTerca = image.clone().crop((2 * emptySpaceWidth) + filledWidth, marginTop,filledWidth, height);
+    const cropQuarta = image.clone().crop((3 * emptySpaceWidth) + (2 * filledWidth) ,marginTop, filledWidth, height)
+    const cropQuinta = image.clone().crop((4 * emptySpaceWidth) + (3 * filledWidth) ,marginTop, filledWidth, height)
+    const cropSexta = image.clone().crop((5 * emptySpaceWidth) + (4 * filledWidth) ,marginTop, filledWidth, height)
 
-    const dateHeight = 70
+    await cropSegunda.writeAsync("1.jpg")
+    await cropTerca.writeAsync("2.jpg")
+    await cropQuarta.writeAsync("3.jpg")
+    await cropQuinta.writeAsync("4.jpg")
+    await cropSexta.writeAsync("5.jpg") 
+}
+module.exports.handler = handler
+
+handler()
+
+/*     const dateHeight = 70
     const dateGap = 9
     const dateMarginTop = marginTop - dateHeight - dateGap
 
@@ -41,8 +63,9 @@ async function handler() {
     const terca = await getText('terca', cropTerca, cropDataTerca)
     const quarta = await getText('quarta', cropQuarta, cropDataQuarta)
     const quinta = await getText('quinta', cropQuinta, cropDataQuinta)
-    const sexta = await getText('sexta', cropSexta, cropDataSexta)
+    const sexta = await getText('sexta', cropSexta, cropDataSexta)/*  */ 
 
+    /* 
     const menus = [segunda, terca, quarta, quinta, sexta]
     for (const diaAtual of menus) {
         const version = await verifyVersion(diaAtual.date)

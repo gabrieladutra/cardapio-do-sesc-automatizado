@@ -19,14 +19,18 @@ async function handler() {
     const totalEmpty = (squares * proportion) + emptySpaces
     const emptySpaceWidth = (imageWidth / totalEmpty)
     const filledWidth = emptySpaceWidth * proportion
+    
      
     console.log("Largura x Altura da imagem:", imageWidth, imageHeight)
     console.log("Tamnhano P: ", filledWidth)
     console.log("Tamanho Vazio:", emptySpaceWidth)
     console.log("Proporção: ", proportion)
 
-    const height = 1500 
-    const marginTop = 0 
+    const marginTop = imageHeight * 0.42
+    const height = imageHeight * 0.31
+
+    console.log("height: ", height)
+    console.log("top:",marginTop)
  
     const cropSegunda = image.clone().crop(emptySpaceWidth, marginTop, filledWidth, height);
     const cropTerca = image.clone().crop((2 * emptySpaceWidth) + filledWidth, marginTop,filledWidth, height);
@@ -38,7 +42,7 @@ async function handler() {
     await cropTerca.writeAsync("2.jpg")
     await cropQuarta.writeAsync("3.jpg")
     await cropQuinta.writeAsync("4.jpg")
-    await cropSexta.writeAsync("5.jpg")
+    await cropSexta.writeAsync("5.jpg") 
 }
     /* const dateHeight = 76
     const dateGap = 5
