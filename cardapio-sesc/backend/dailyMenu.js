@@ -29,7 +29,6 @@ export async function getMenuOfTheDayList(tableName, date) {
     return data.Items;
 }
 
-
 export async function findMenu(menus) {
     if (!menus || menus.length === 0) return null;
 
@@ -80,7 +79,6 @@ export async function getLanMessage(){
 export default async function handler(){
     const restMsg = await getRestMessage();
     const lanMsg = await getLanMessage();
-
     return {
     statusCode: 200,
     headers: {
@@ -94,6 +92,3 @@ export default async function handler(){
     }),
   };
 };
-
-
-//handler()
