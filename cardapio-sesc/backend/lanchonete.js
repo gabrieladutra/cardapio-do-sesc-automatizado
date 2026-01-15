@@ -39,61 +39,50 @@ async function handler() {
     const cropQuinta = image.clone().crop((4 * emptySpaceWidth) + (3 * filledWidth) ,marginTop, filledWidth, height)
     const cropSexta = image.clone().crop((5 * emptySpaceWidth) + (4 * filledWidth) ,marginTop, filledWidth, height)
 
-    await cropSegunda.writeAsync("1.jpg")
-    await cropTerca.writeAsync("2.jpg")
-    await cropQuarta.writeAsync("3.jpg")
-    await cropQuinta.writeAsync("4.jpg")
-    await cropSexta.writeAsync("5.jpg") 
-}
-module.exports.handler = handler
+    const dateHeight = imageHeight * 0.04
+    const dateMarginTop = imageHeight * 0.37
 
-handler()
-
-/*     const dateHeight = 70
-    const dateGap = 9
-    const dateMarginTop = marginTop - dateHeight - dateGap
-
-    const cropDataSegunda = image.clone().crop(marginLeft, dateMarginTop, width, dateHeight)
-    const cropDataTerca = image.clone().crop(marginLeft + width + gap, dateMarginTop, width, dateHeight)
-    const cropDataQuarta = image.clone().crop(marginLeft + (width + gap) * 2, dateMarginTop, width, dateHeight)
-    const cropDataQuinta = image.clone().crop(marginLeft + (width + gap) * 3, dateMarginTop, width, dateHeight)
-    const cropDataSexta = image.clone().crop(marginLeft + (width + gap) * 4, dateMarginTop, width, dateHeight)
+    const cropDataSegunda = image.clone().crop(emptySpaceWidth, dateMarginTop, filledWidth, dateHeight)
+    const cropDataTerca = image.clone().crop((2 * emptySpaceWidth) + filledWidth, dateMarginTop, filledWidth, dateHeight)
+    const cropDataQuarta = image.clone().crop((3 * emptySpaceWidth) + (2 * filledWidth), dateMarginTop, filledWidth, dateHeight)
+    const cropDataQuinta = image.clone().crop((4 * emptySpaceWidth) + (3 * filledWidth), dateMarginTop, filledWidth, dateHeight)
+    const cropDataSexta = image.clone().crop((5 * emptySpaceWidth) + (4 * filledWidth), dateMarginTop, filledWidth, dateHeight)
 
     const segunda = await getText('segunda', cropSegunda, cropDataSegunda)
     const terca = await getText('terca', cropTerca, cropDataTerca)
     const quarta = await getText('quarta', cropQuarta, cropDataQuarta)
     const quinta = await getText('quinta', cropQuinta, cropDataQuinta)
-    const sexta = await getText('sexta', cropSexta, cropDataSexta)/*  */ 
+    const sexta = await getText('sexta', cropSexta, cropDataSexta)
 
-    /* 
-    const menus = [segunda, terca, quarta, quinta, sexta]
-    for (const diaAtual of menus) {
-        const version = await verifyVersion(diaAtual.date)
-        if (version.length === 0) {
-            await saveToDynamoDB(diaAtual, 1)
-            continue;
-        }
 
-        let maior = version[0];
+    // const menus = [segunda, terca, quarta, quinta, sexta]
+    // for (const diaAtual of menus) {
+    //     const version = await verifyVersion(diaAtual.date)
+    //     if (version.length === 0) {
+    //         await saveToDynamoDB(diaAtual, 1)
+    //         continue;
+    //     }
 
-        for (let i = 1; i < version.length; i++) {
-            if (parseInt(version[i].versao.N) > parseInt(maior.versao.N)) {
-                maior = version[i];
-            }
-        }
-        if (maior.texto.S.trim() !== diaAtual.text.trim()) {
-            const novaVersao = parseInt(maior.versao.N) + 1;
-            await saveToDynamoDB(diaAtual, novaVersao);
-        }
-    }
+    //     let maior = version[0];
+
+    //     for (let i = 1; i < version.length; i++) {
+    //         if (parseInt(version[i].versao.N) > parseInt(maior.versao.N)) {
+    //             maior = version[i];
+    //         }
+    //     }
+    //     if (maior.texto.S.trim() !== diaAtual.text.trim()) {
+    //         const novaVersao = parseInt(maior.versao.N) + 1;
+    //         await saveToDynamoDB(diaAtual, novaVersao);
+    //     }
+    // }
    
 }
 async function getText(name, cropped, croppedData) {
     const worker = await createWorker('eng');
     //Descomentar para ajudar na depuração
-    //const file = './' + name + '.png'
-    //await croppedData.writeAsync(file)
-    //console.log('Escrito arquivo ' + file)
+    const file = './' + name + '.png'
+    await cropped.writeAsync(file)
+    console.log('Escrito arquivo ' + file)
     const buffer = await cropped.getBufferAsync("image/png")
     const bufferData = await croppedData.getBufferAsync("image/png")
     const texto = await worker.recognize(buffer)
@@ -110,7 +99,6 @@ async function getText(name, cropped, croppedData) {
 
 
 module.exports.handler = handler
-
 handler()
 /* 
 async function saveToDynamoDB(menu, versao) {

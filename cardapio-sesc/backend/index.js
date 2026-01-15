@@ -19,18 +19,9 @@ async function handler() {
     const totalEmpty = (squares * proportion) + emptySpaces
     const emptySpaceWidth = (imageWidth / totalEmpty)
     const filledWidth = emptySpaceWidth * proportion
-
-
-    console.log("Largura x Altura da imagem:", imageWidth, imageHeight)
-    console.log("Tamnhano P: ", filledWidth)
-    console.log("Tamanho Vazio:", emptySpaceWidth)
-    console.log("Proporção: ", proportion)
-
     const marginTop = imageHeight * 0.42
     const height = imageHeight * 0.31
 
-    console.log("height: ", height)
-    console.log("top:", marginTop)
 
     const cropSegunda = image.clone().crop(emptySpaceWidth, marginTop, filledWidth, height);
     const cropTerca = image.clone().crop((2 * emptySpaceWidth) + filledWidth, marginTop, filledWidth, height);
@@ -38,14 +29,8 @@ async function handler() {
     const cropQuinta = image.clone().crop((4 * emptySpaceWidth) + (3 * filledWidth), marginTop, filledWidth, height)
     const cropSexta = image.clone().crop((5 * emptySpaceWidth) + (4 * filledWidth), marginTop, filledWidth, height)
 
-    /*   await cropSegunda.writeAsync("1.jpg")
-      await cropTerca.writeAsync("2.jpg")
-      await cropQuarta.writeAsync("3.jpg")
-      await cropQuinta.writeAsync("4.jpg")
-      await cropSexta.writeAsync("5.jpg") */
 
     const dateHeight = imageHeight * 0.04
-
     const dateMarginTop = imageHeight * 0.38
 
     const cropDataSegunda = image.clone().crop(emptySpaceWidth, dateMarginTop, filledWidth, dateHeight)
@@ -60,7 +45,7 @@ async function handler() {
     const quinta = await getText('quinta', cropQuinta, cropDataQuinta)
     const sexta = await getText('sexta', cropSexta, cropDataSexta)
 
-    /* const menus = [segunda, terca, quarta, quinta, sexta]
+    const menus = [segunda, terca, quarta, quinta, sexta]
     for (const diaAtual of menus) {
         const version = await verifyVersion(diaAtual.date)
         if (version.length === 0) {
@@ -79,15 +64,15 @@ async function handler() {
             const novaVersao = parseInt(maior.versao.N) + 1;
             await saveToDynamoDB(diaAtual, novaVersao);
         }
-    } */
+    } 
 
 }
 async function getText(name, cropped, croppedData) {
     const worker = await createWorker('eng');
     //Descomentar para ajudar na depuração
-    const file = './' + name + '.png'
-    await croppedData.writeAsync(file)
-    console.log('Escrito arquivo ' + file)
+    // const file = './' + name + '.png'
+    // await croppedData.writeAsync(file)
+    // console.log('Escrito arquivo ' + file)
     const buffer = await cropped.getBufferAsync("image/png")
     const bufferData = await croppedData.getBufferAsync("image/png")
     const texto = await worker.recognize(buffer)
@@ -102,10 +87,6 @@ async function getText(name, cropped, croppedData) {
     return menu
 }
 
-module.exports.handler = handler
-handler()
-
-/* 
 async function saveToDynamoDB(menu, versao) {
     const params = {
         TableName: 'menu',
@@ -142,4 +123,6 @@ async function verifyVersion(date) {
 
     return data.Items;
     }
- */
+ 
+// module.exports.handler = handler
+// handler()
