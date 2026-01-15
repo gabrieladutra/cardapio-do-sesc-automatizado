@@ -10,7 +10,6 @@ async function handler() {
     const root = parse(html);
     const img = root.querySelector('.alignnone.size-full');
     let src = img.getAttribute('src');
-    //console.log("SRC da imagem:", src);
     const image = await Jimp.read(src);
     const imageWidth = image.bitmap.width
     const imageHeight = image.bitmap.height
@@ -21,17 +20,8 @@ async function handler() {
     const emptySpaceWidth = (imageWidth / totalEmpty)
     const filledWidth = emptySpaceWidth * proportion
     
-     
-    console.log("Largura x Altura da imagem:", imageWidth, imageHeight)
-    console.log("Tamnhano P: ", filledWidth)
-    console.log("Tamanho Vazio:", emptySpaceWidth)
-    console.log("Proporção: ", proportion)
-
     const marginTop = imageHeight * 0.42
     const height = imageHeight * 0.31
-
-    console.log("height: ", height)
-    console.log("top:",marginTop)
  
     const cropSegunda = image.clone().crop(emptySpaceWidth, marginTop, filledWidth, height);
     const cropTerca = image.clone().crop((2 * emptySpaceWidth) + filledWidth, marginTop,filledWidth, height);
@@ -53,7 +43,6 @@ async function handler() {
     const quarta = await getText('quarta', cropQuarta, cropDataQuarta)
     const quinta = await getText('quinta', cropQuinta, cropDataQuinta)
     const sexta = await getText('sexta', cropSexta, cropDataSexta)
-
 
     const menus = [segunda, terca, quarta, quinta, sexta]
     for (const diaAtual of menus) {
