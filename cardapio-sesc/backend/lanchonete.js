@@ -133,5 +133,5 @@ async function verifyVersion(date) {
 
     return data.Items;
 }
-//module.exports.handler = handler
+module.exports.handler = handler
 //handler()
