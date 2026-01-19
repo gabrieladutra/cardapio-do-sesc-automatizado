@@ -76,19 +76,33 @@ export async function getLanMessage(){
     return `${hoje}\n${menuAtualizadoLan.texto.S}`;
 }
 
-export default async function handler(){
-    const restMsg = await getRestMessage();
-    const lanMsg = await getLanMessage();
+export default async function handler(event) {
+  if (event?.requestContext?.http?.method === "OPTIONS") {
     return {
+      statusCode: 200,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "*",
+        "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
+      },
+      body: "",
+    };
+  }
+
+  const restMsg = await getRestMessage();
+  const lanMsg = await getLanMessage();
+
+  return {
     statusCode: 200,
     headers: {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Headers": "*",
       "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
+      "Content-Type": "application/json",
     },
     body: JSON.stringify({
       restaurante: restMsg,
-      lanchonete: lanMsg
+      lanchonete: lanMsg,
     }),
   };
-};
+}
