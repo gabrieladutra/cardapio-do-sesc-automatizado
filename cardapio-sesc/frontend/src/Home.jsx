@@ -15,9 +15,9 @@ export default function Home() {
       try {
         // throw new Error('asdadadsa')
         const url = "https://wjvt3d5qwbxlh425nqc6pgnd3a0ybfyi.lambda-url.sa-east-1.on.aws/"
-        //await new Promise(resolve => setTimeout(resolve, 10 * 1000))
+        //await new Promise(resolve => setTimeout(resolve,10))
         const response = await fetch(url)
-        setLoading(false)
+        
         const dados = await response.json()
 
         setMenuRestaurante(dados.restaurante)
@@ -25,6 +25,8 @@ export default function Home() {
       } catch (e) {
         console.error(e);
         setIsError(true)
+      } finally{
+        setLoading(false)
       }
 
     }
