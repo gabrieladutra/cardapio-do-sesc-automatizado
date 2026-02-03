@@ -20,23 +20,28 @@ export default function MenuSemanal() {
 
     useEffect(() => {
         async function fetchMenu() {
-            const url = "https://nzn6ek54m6mq2asfgmogtrn3uy0eynrj.lambda-url.sa-east-1.on.aws/"
-            //await new Promise(resolve => setTimeout(resolve, 10 * 1000))
-            const response = await fetch(url)
-            setLoading(false)
-            const dados = await response.json()
+            try {
+                const url = "https://nzn6ek54m6mq2asfgmogtrn3uy0eynrj.lambda-url.sa-east-1.on.aws/"
+                const response = await fetch(url)
+                const dados = await response.json()
 
-            setMenuRestauranteSeg(dados.restaurante[0][0].texto.S)
-            setMenuRestauranteTer(dados.restaurante[1][0].texto.S)
-            setMenuRestauranteQua(dados.restaurante[2][0].texto.S)
-            setMenuRestauranteQui(dados.restaurante[3][0].texto.S)
-            setMenuRestauranteSext(dados.restaurante[4][0].texto.S)
+                setMenuRestauranteSeg(dados.restaurante[0][0].texto.S)
+                setMenuRestauranteTer(dados.restaurante[1][0].texto.S)
+                setMenuRestauranteQua(dados.restaurante[2][0].texto.S)
+                setMenuRestauranteQui(dados.restaurante[3][0].texto.S)
+                setMenuRestauranteSext(dados.restaurante[4][0].texto.S)
 
-            setMenuLanchoneteSeg(dados.lanchonete[0][0].texto.S)
-            setMenuLanchoneteTer(dados.lanchonete[1][0].texto.S)
-            setMenuLanchoneteQua(dados.lanchonete[2][0].texto.S)
-            setMenuLanchoneteQui(dados.lanchonete[3][0].texto.S)
-            setMenuLanchoneteSext(dados.lanchonete[4][0].texto.S)
+                setMenuLanchoneteSeg(dados.lanchonete[0][0].texto.S)
+                setMenuLanchoneteTer(dados.lanchonete[1][0].texto.S)
+                setMenuLanchoneteQua(dados.lanchonete[2][0].texto.S)
+                setMenuLanchoneteQui(dados.lanchonete[3][0].texto.S)
+                setMenuLanchoneteSext(dados.lanchonete[4][0].texto.S)
+            } catch (e) {
+                console.error(e);
+                setIsError(true)
+            } finally {
+                setLoading(false)
+            }
         }
         fetchMenu()
     }, [])
@@ -51,14 +56,14 @@ export default function MenuSemanal() {
             <div className="flex flex-col md:flex-row gap-4 mt-2">
                 <div className="text-center">
                     <p className="font-semibold text-blue-950">Segunda</p>
-                    <div className="border-2 border-blue-950 pt-3 px-2 w-48 h-65 whitespace-pre-line rounded-md">
+                    <div className="border-2 border-blue-950 pt-3 px-2 w-48 h-70 whitespace-pre-line rounded-md">
                         {loading ? <Loader strokeWidth={0.75} size="32" className="md:w-15 md:h-15 mt-20 ml-15 md:mt-16 md:ml-16 md:mr-30 animate-spin [animation-duration:5s] text-gray-400 " /> : menuRestauranteSeg}
                     </div>
                 </div>
 
                 <div className="text-center">
                     <p className="font-semibold text-blue-950">Terça</p>
-                    <div className="border-2 border-blue-950 pt-3 px-2 w-48 h-65 whitespace-pre-line rounded-md">
+                    <div className="border-2 border-blue-950 pt-3 px-2 w-48 h-70 whitespace-pre-line rounded-md">
                         {loading ? <Loader strokeWidth={0.75} size="32" className="md:w-15 md:h-15 mt-20 md:mt-16 ml-15 md:ml-16 md:mr-30 animate-spin [animation-duration:5s] text-gray-400 " /> : menuRestauranteTer}
 
                     </div>
@@ -66,22 +71,22 @@ export default function MenuSemanal() {
 
                 <div className="text-center">
                     <p className="font-semibold text-blue-950">Quarta</p>
-                    <div className="border-2 border-blue-950 pt-3 px-2 w-48 h-65 whitespace-pre-line rounded-md">
+                    <div className="border-2 border-blue-950 pt-3 px-2 w-48 h-70 whitespace-pre-line rounded-md">
                         {loading ? <Loader strokeWidth={0.75} size="32" className="md:w-15 md:h-15 mt-20 md:mt-16 ml-15 md:ml-16 md:mr-30 animate-spin [animation-duration:5s] text-gray-400 " /> : menuRestauranteQua}
                     </div>
                 </div>
 
                 <div className="text-center">
                     <p className="font-semibold text-blue-950">Quinta</p>
-                    <div className="border-2 border-blue-950 pt-3 px-2 w-48 h-65 whitespace-pre-line rounded-md">
+                    <div className="border-2 border-blue-950 pt-3 px-2 w-48 h-70 whitespace-pre-line rounded-md">
                         {loading ? <Loader strokeWidth={0.75} size="32" className="md:w-15 md:h-15 mt-20 md:mt-16 ml-15 md:ml-16 md:mr-30 animate-spin [animation-duration:5s] text-gray-400 " /> : menuRestauranteQui}
                     </div>
                 </div>
 
                 <div className="text-center">
                     <p className="font-semibold text-blue-950">Sexta</p>
-                    <div className="border-2 border-blue-950 pt-3 px-2 w-48 h-65 whitespace-pre-line rounded-md">
-                        {loading ? <Loader strokeWidth={0.75} size="32"className="md:w-15 md:h-15 mt-20 md:mt-16 ml-15 md:ml-16 md:mr-30 animate-spin [animation-duration:5s] text-gray-400 "/>: menuRestauranteSext}
+                    <div className="border-2 border-blue-950 pt-3 px-2 w-48 h-70 whitespace-pre-line rounded-md">
+                        {loading ? <Loader strokeWidth={0.75} size="32" className="md:w-15 md:h-15 mt-20 md:mt-16 ml-15 md:ml-16 md:mr-30 animate-spin [animation-duration:5s] text-gray-400 " /> : menuRestauranteSext}
                     </div>
                 </div>
             </div>
@@ -91,39 +96,39 @@ export default function MenuSemanal() {
             <div className="flex flex-col md:flex-row gap-4 mt-2">
                 <div className="text-center">
                     <p className="font-semibold text-blue-950">Segunda</p>
-                    <div className="border-2 border-blue-950 pt-3 px-2 w-48 h-65 whitespace-pre-line rounded-md">
-                      {loading ? <Loader strokeWidth={0.75} size="32" className="md:w-15 md:h-15 mt-20 md:mt-16 ml-15 md:ml-16 md:mr-30 animate-spin [animation-duration:5s] text-gray-400 " /> : menuLanchoneteSeg}
+                    <div className="border-2 border-blue-950 pt-3 px-2 w-48 h-70 whitespace-pre-line rounded-md">
+                        {loading ? <Loader strokeWidth={0.75} size="32" className="md:w-15 md:h-15 mt-20 md:mt-16 ml-15 md:ml-16 md:mr-30 animate-spin [animation-duration:5s] text-gray-400 " /> : menuLanchoneteSeg}
 
                     </div>
                 </div>
 
                 <div className="text-center">
                     <p className="font-semibold text-blue-950">Terça</p>
-                    <div className="border-2 border-blue-950 pt-3 px-2 w-48 h-65 whitespace-pre-line rounded-md">
-                     {loading ? <Loader strokeWidth={0.75} size="32" className="md:w-15 md:h-15 mt-20 md:mt-16 ml-15 md:ml-16 md:mr-30 animate-spin [animation-duration:5s] text-gray-400 " /> : menuLanchoneteTer}
-                       
+                    <div className="border-2 border-blue-950 pt-3 px-2 w-48 h-70 whitespace-pre-line rounded-md">
+                        {loading ? <Loader strokeWidth={0.75} size="32" className="md:w-15 md:h-15 mt-20 md:mt-16 ml-15 md:ml-16 md:mr-30 animate-spin [animation-duration:5s] text-gray-400 " /> : menuLanchoneteTer}
+
                     </div>
                 </div>
 
                 <div className="text-center">
                     <p className="font-semibold text-blue-950">Quarta</p>
-                    <div className="border-2 border-blue-950 pt-3 px-2 w-48 h-65 whitespace-pre-line rounded-md">
-                     {loading ? <Loader strokeWidth={0.75} size="32" className="md:w-15 md:h-15 mt-20 md:mt-16 ml-15 md:ml-16 md:mr-30 animate-spin [animation-duration:5s] text-gray-400 " /> : menuLanchoneteQua}
-                        
+                    <div className="border-2 border-blue-950 pt-3 px-2 w-48 h-70 whitespace-pre-line rounded-md">
+                        {loading ? <Loader strokeWidth={0.75} size="32" className="md:w-15 md:h-15 mt-20 md:mt-16 ml-15 md:ml-16 md:mr-30 animate-spin [animation-duration:5s] text-gray-400 " /> : menuLanchoneteQua}
+
                     </div>
                 </div>
 
                 <div className="text-center">
                     <p className="font-semibold text-blue-950">Quinta</p>
-                    <div className="border-2 border-blue-950 pt-3 px-2 w-48 h-65 whitespace-pre-line rounded-md">
-                     {loading ? <Loader strokeWidth={0.75} size="32" className="md:w-15 md:h-15 mt-20 md:mt-16 ml-15 md:ml-16 md:mr-30 animate-spin [animation-duration:5s] text-gray-400 " /> : menuLanchoneteQui}
+                    <div className="border-2 border-blue-950 pt-3 px-2 w-48 h-70 whitespace-pre-line rounded-md">
+                        {loading ? <Loader strokeWidth={0.75} size="32" className="md:w-15 md:h-15 mt-20 md:mt-16 ml-15 md:ml-16 md:mr-30 animate-spin [animation-duration:5s] text-gray-400 " /> : menuLanchoneteQui}
                     </div>
                 </div>
 
                 <div className="text-center">
                     <p className="font-semibold text-blue-950">Sexta</p>
-                    <div className="border-2 border-blue-950 pt-3 px-2 w-48 h-65 whitespace-pre-line rounded-md">
-                     {loading ? <Loader strokeWidth={0.75} size="32" className="md:w-15 md:h-15 mt-20 md:mt-16 ml-15 md:ml-16 md:mr-30 animate-spin [animation-duration:5s] text-gray-400 " /> : menuLanchoneteSext}
+                    <div className="border-2 border-blue-950 pt-3 px-2 w-48 h-70 whitespace-pre-line rounded-md">
+                        {loading ? <Loader strokeWidth={0.75} size="32" className="md:w-15 md:h-15 mt-20 md:mt-16 ml-15 md:ml-16 md:mr-30 animate-spin [animation-duration:5s] text-gray-400 " /> : menuLanchoneteSext}
                     </div>
                 </div>
             </div>
