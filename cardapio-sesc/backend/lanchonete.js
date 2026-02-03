@@ -1,16 +1,52 @@
-const { DynamoDBClient, PutItemCommand, QueryCommand } = require('@aws-sdk/client-dynamodb');
-const { parse } = require('node-html-parser')
-const { createWorker } = require('tesseract.js');
-const Jimp  = require('jimp');
+import { DynamoDBClient, PutItemCommand, QueryCommand } from "@aws-sdk/client-dynamodb"
+import { parse } from "node-html-parser"
+import { createWorker } from "tesseract.js"
+import Jimp from "jimp"
 const dynamo = new DynamoDBClient({ region: 'sa-east-1' });
 
-async function handler() {
+export async function handler(event) {
+  // CORS preflight
+  if (event.requestContext?.http?.method === "OPTIONS") {
+    return {
+      statusCode: 200,
+      headers: corsHeaders(),
+      body: "",
+    }
+  }
+
+  try {
+    await processMenu()
+
+    return {
+      statusCode: 200,
+      headers: corsHeaders(),
+      body: JSON.stringify({ ok: true }),
+    }
+  } catch (error) {
+    console.error(error)
+
+    return {
+      statusCode: 500,
+      headers: corsHeaders(),
+      body: JSON.stringify({ error: "Erro interno" }),
+    }
+  }
+}
+
+function corsHeaders() {
+  return {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Headers": "*",
+    "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
+  }
+}
+
+async function processMenu() {
     const response = await fetch('https://www.sescpr.com.br/unidade/sesc-da-esquina/espaco/lanchonete/');
     const html = await response.text();
     const root = parse(html);
     const img = root.querySelector('.alignnone.size-full');
     let src = img.getAttribute('src');
-    //console.log("SRC da imagem:", src);
     const image = await Jimp.read(src);
     const imageWidth = image.bitmap.width
     const imageHeight = image.bitmap.height
@@ -21,17 +57,8 @@ async function handler() {
     const emptySpaceWidth = (imageWidth / totalEmpty)
     const filledWidth = emptySpaceWidth * proportion
     
-     
-    console.log("Largura x Altura da imagem:", imageWidth, imageHeight)
-    console.log("Tamnhano P: ", filledWidth)
-    console.log("Tamanho Vazio:", emptySpaceWidth)
-    console.log("Proporção: ", proportion)
-
     const marginTop = imageHeight * 0.42
     const height = imageHeight * 0.31
-
-    console.log("height: ", height)
-    console.log("top:",marginTop)
  
     const cropSegunda = image.clone().crop(emptySpaceWidth, marginTop, filledWidth, height);
     const cropTerca = image.clone().crop((2 * emptySpaceWidth) + filledWidth, marginTop,filledWidth, height);
@@ -53,7 +80,6 @@ async function handler() {
     const quarta = await getText('quarta', cropQuarta, cropDataQuarta)
     const quinta = await getText('quinta', cropQuinta, cropDataQuinta)
     const sexta = await getText('sexta', cropSexta, cropDataSexta)
-
 
     const menus = [segunda, terca, quarta, quinta, sexta]
     for (const diaAtual of menus) {
@@ -133,5 +159,5 @@ async function verifyVersion(date) {
 
     return data.Items;
 }
-module.exports.handler = handler
+//module.exports.handler = handler
 //handler()

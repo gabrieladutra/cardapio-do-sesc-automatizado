@@ -1,128 +1,151 @@
-const { DynamoDBClient, PutItemCommand, QueryCommand } = require('@aws-sdk/client-dynamodb');
-const { parse } = require('node-html-parser')
-const { createWorker } = require('tesseract.js');
-const Jimp = require('jimp');
-const dynamo = new DynamoDBClient({ region: 'sa-east-1' });
+import { DynamoDBClient, PutItemCommand, QueryCommand } from "@aws-sdk/client-dynamodb"
+import { parse } from "node-html-parser"
+import { createWorker } from "tesseract.js"
+import Jimp from "jimp"
 
-async function handler() {
-    const response = await fetch('https://www.sescpr.com.br/unidade/sesc-da-esquina/espaco/restaurante-3/');
-    const html = await response.text();
-    const root = parse(html);
-    const img = root.querySelector('.alignnone');
-    const src = img.getAttribute('src');
-    const image = await Jimp.read(src);
-    const imageWidth = image.bitmap.width
-    const imageHeight = image.bitmap.height
-    const squares = 5
-    const emptySpaces = 6
-    const proportion = 14.314285714
-    const totalEmpty = (squares * proportion) + emptySpaces
-    const emptySpaceWidth = (imageWidth / totalEmpty)
-    const filledWidth = emptySpaceWidth * proportion
-    const marginTop = imageHeight * 0.42
-    const height = imageHeight * 0.31
+const dynamo = new DynamoDBClient({ region: "sa-east-1" })
 
-
-    const cropSegunda = image.clone().crop(emptySpaceWidth, marginTop, filledWidth, height);
-    const cropTerca = image.clone().crop((2 * emptySpaceWidth) + filledWidth, marginTop, filledWidth, height);
-    const cropQuarta = image.clone().crop((3 * emptySpaceWidth) + (2 * filledWidth), marginTop, filledWidth, height)
-    const cropQuinta = image.clone().crop((4 * emptySpaceWidth) + (3 * filledWidth), marginTop, filledWidth, height)
-    const cropSexta = image.clone().crop((5 * emptySpaceWidth) + (4 * filledWidth), marginTop, filledWidth, height)
-
-
-    const dateHeight = imageHeight * 0.04
-    const dateMarginTop = imageHeight * 0.38
-
-    const cropDataSegunda = image.clone().crop(emptySpaceWidth, dateMarginTop, filledWidth, dateHeight)
-    const cropDataTerca = image.clone().crop((2 * emptySpaceWidth) + filledWidth, dateMarginTop, filledWidth, dateHeight)
-    const cropDataQuarta = image.clone().crop((3 * emptySpaceWidth) + (2 * filledWidth), dateMarginTop, filledWidth, dateHeight)
-    const cropDataQuinta = image.clone().crop((4 * emptySpaceWidth) + (3 * filledWidth), dateMarginTop, filledWidth, dateHeight)
-    const cropDataSexta = image.clone().crop((5 * emptySpaceWidth) + (4 * filledWidth), dateMarginTop, filledWidth, dateHeight)
-
-    const segunda = await getText('segunda', cropSegunda, cropDataSegunda)
-    const terca = await getText('terca', cropTerca, cropDataTerca)
-    const quarta = await getText('quarta', cropQuarta, cropDataQuarta)
-    const quinta = await getText('quinta', cropQuinta, cropDataQuinta)
-    const sexta = await getText('sexta', cropSexta, cropDataSexta)
-
-    const menus = [segunda, terca, quarta, quinta, sexta]
-    for (const diaAtual of menus) {
-        const version = await verifyVersion(diaAtual.date)
-        if (version.length === 0) {
-            await saveToDynamoDB(diaAtual, 1)
-            continue;
-        }
-
-        let maior = version[0];
-
-        for (let i = 1; i < version.length; i++) {
-            if (parseInt(version[i].versao.N) > parseInt(maior.versao.N)) {
-                maior = version[i];
-            }
-        }
-        if (maior.texto.S.trim() !== diaAtual.text.trim()) {
-            const novaVersao = parseInt(maior.versao.N) + 1;
-            await saveToDynamoDB(diaAtual, novaVersao);
-        }
-    } 
-
-}
-async function getText(name, cropped, croppedData) {
-    const worker = await createWorker('eng');
-    //Descomentar para ajudar na depuração
-    // const file = './' + name + '.png'
-    // await croppedData.writeAsync(file)
-    // console.log('Escrito arquivo ' + file)
-    const buffer = await cropped.getBufferAsync("image/png")
-    const bufferData = await croppedData.getBufferAsync("image/png")
-    const texto = await worker.recognize(buffer)
-    const data = await worker.recognize(bufferData)
-    const menu = {
-        text: texto.data.text,
-        date: data.data.text,
+export async function handler(event) {
+  // CORS preflight
+  if (event.requestContext?.http?.method === "OPTIONS") {
+    return {
+      statusCode: 200,
+      headers: corsHeaders(),
+      body: "",
     }
-    console.log('---- TEXTO RECONHECIDO ----')
-    console.log(`Data: ${menu.date} \n${menu.text}`);
-    await worker.terminate();
-    return menu
+  }
+
+  try {
+    await processMenu()
+
+    return {
+      statusCode: 200,
+      headers: corsHeaders(),
+      body: JSON.stringify({ ok: true }),
+    }
+  } catch (error) {
+    console.error(error)
+
+    return {
+      statusCode: 500,
+      headers: corsHeaders(),
+      body: JSON.stringify({ error: "Erro interno" }),
+    }
+  }
+}
+
+function corsHeaders() {
+  return {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Headers": "*",
+    "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
+  }
+}
+
+async function processMenu() {
+  const response = await fetch(
+    "https://www.sescpr.com.br/unidade/sesc-da-esquina/espaco/restaurante-3/"
+  )
+
+  const html = await response.text()
+  const root = parse(html)
+  const img = root.querySelector(".alignnone")
+  const src = img.getAttribute("src")
+
+  const image = await Jimp.read(src)
+  const imageWidth = image.bitmap.width
+  const imageHeight = image.bitmap.height
+
+  const squares = 5
+  const emptySpaces = 6
+  const proportion = 14.314285714
+
+  const totalEmpty = squares * proportion + emptySpaces
+  const emptySpaceWidth = imageWidth / totalEmpty
+  const filledWidth = emptySpaceWidth * proportion
+
+  const marginTop = imageHeight * 0.42
+  const height = imageHeight * 0.31
+
+  const crops = [
+    emptySpaceWidth,
+    (2 * emptySpaceWidth) + filledWidth,
+    (3 * emptySpaceWidth) + (2 * filledWidth),
+    (4 * emptySpaceWidth) + (3 * filledWidth),
+    (5 * emptySpaceWidth) + (4 * filledWidth),
+  ]
+
+  const dateMarginTop = imageHeight * 0.38
+  const dateHeight = imageHeight * 0.04
+
+  const days = []
+
+  for (let i = 0; i < 5; i++) {
+    const menuCrop = image.clone().crop(crops[i], marginTop, filledWidth, height)
+    const dateCrop = image.clone().crop(crops[i], dateMarginTop, filledWidth, dateHeight)
+    days.push(await getText(menuCrop, dateCrop))
+  }
+
+  for (const dia of days) {
+    const versions = await verifyVersion(dia.date)
+
+    if (versions.length === 0) {
+      await saveToDynamoDB(dia, 1)
+      continue
+    }
+
+    let maior = versions[0]
+    for (const v of versions) {
+      if (parseInt(v.versao.N) > parseInt(maior.versao.N)) {
+        maior = v
+      }
+    }
+
+    if (maior.texto.S.trim() !== dia.text.trim()) {
+      await saveToDynamoDB(dia, parseInt(maior.versao.N) + 1)
+    }
+  }
+}
+
+async function getText(cropped, croppedData) {
+  const worker = await createWorker("eng")
+
+  const buffer = await cropped.getBufferAsync("image/png")
+  const bufferData = await croppedData.getBufferAsync("image/png")
+
+  const texto = await worker.recognize(buffer)
+  const data = await worker.recognize(bufferData)
+
+  await worker.terminate()
+
+  return {
+    text: texto.data.text,
+    date: data.data.text,
+  }
 }
 
 async function saveToDynamoDB(menu, versao) {
-    const params = {
-        TableName: 'menu',
+  const params = {
+    TableName: "menu",
+    Item: {
+      data: { S: String(menu.date || "").trim() },
+      texto: { S: String(menu.text || "").trim() },
+      versao: { N: String(versao) },
+    },
+  }
 
-        Item: {
-            data: { S: String(menu.date || '').trim() },
-            texto: { S: String(menu.text || '').trim() },
-            versao: { N: String(versao) },
-        },
-    };
-
-    await dynamo.send(new PutItemCommand(params));
-    console.log('Item salvo no DynamoDB:', menu.date);
+  await dynamo.send(new PutItemCommand(params))
 }
 
 async function verifyVersion(date) {
-    const params = {
-        TableName: "menu",
-        KeyConditionExpression: "#d = :d",
-        ExpressionAttributeNames: {
-            "#d": "data",
-        },
-        ExpressionAttributeValues: {
-            ":d": { S: String(date).trim() },
-        },
-        ConsistentRead: true,
-    };
-    const data = await dynamo.send(new QueryCommand(params));
-    if (!data.Items || data.Items.length === 0) {
-        console.log("Nenhum item encontrado para:", date);
-        return [];
-    }
-    console.log("Itens encontrados:", data.Items);
+  const params = {
+    TableName: "menu",
+    KeyConditionExpression: "#d = :d",
+    ExpressionAttributeNames: { "#d": "data" },
+    ExpressionAttributeValues: { ":d": { S: String(date).trim() } },
+    ConsistentRead: true,
+  }
 
-    return data.Items;
-    }
- 
-module.exports.handler = handler
-// handler()
+  const data = await dynamo.send(new QueryCommand(params))
+  return data.Items ?? []
+}
