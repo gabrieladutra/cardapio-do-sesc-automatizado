@@ -97,7 +97,7 @@ export default function Home() {
       </div>
 
       <button
-        onClick={() => navigate("/menu-semanal")}
+        onClick={() => navigate("/menu-semanal/")}
         className="rounded-md bg-green-700 text-white h-11 px-4 flex items-center gap-2 cursor-pointer mt-5 md:mb-8 md:mt-10"
       >
         <CircleChevronRight />
