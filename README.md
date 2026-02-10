@@ -1,6 +1,12 @@
 ## Cardápio do Sesc Automatizado  
 Automação para capturar o cardápio diário do Sesc, extrair o texto via OCR, detectar mudanças e enviar SMS automaticamente usando AWS.  
 
+### Aplicação
+
+![Home](/assets/home.png)
+
+![SMS](/assets/smsPrint.png)
+
 
 ### Arquitetura
 
