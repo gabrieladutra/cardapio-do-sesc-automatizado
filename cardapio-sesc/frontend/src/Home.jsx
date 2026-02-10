@@ -51,7 +51,6 @@ export default function Home() {
         MENU DIÁRIO
       </h1>
 
-      {/* DATA */}
       {!isLoading && dataTexto && (
         <h1 className="text-yellow-800 text-lg md:text-2xl mt-2 md:mt-4">
           {dataTexto}
@@ -59,7 +58,6 @@ export default function Home() {
       )}
 
       <div className="flex flex-col md:flex-row gap-3 md:gap-8 mt-2 md:mt-10">
-        {/* Restaurante */}
         <div className="flex flex-col items-center">
           <h2 className="text-blue-950 font-semibold md:text-2xl md:pb-3">
             Restaurante
