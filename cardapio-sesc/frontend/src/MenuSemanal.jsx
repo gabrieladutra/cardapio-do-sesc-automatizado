@@ -13,9 +13,12 @@ async function fetchMenu() {
 }
 
 function getTexto(data, tipo, dia) {
-  return data?.[tipo]?.[dia]?.[0]?.texto?.S ?? ""
-}
+  const texto = data?.[tipo]?.[dia]?.[0]?.texto?.S ?? ""
 
+  return texto
+    .replace(/\n\s*\n+/g, "\n") 
+    .trim()
+}
 export default function MenuSemanal() {
   const navigate = useNavigate()
 
