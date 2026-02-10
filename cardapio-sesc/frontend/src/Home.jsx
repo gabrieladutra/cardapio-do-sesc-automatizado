@@ -62,7 +62,7 @@ export default function Home() {
           <h2 className="text-blue-950 font-semibold md:text-2xl md:pb-3">
             Restaurante
           </h2>
-          <div className="border-2 border-blue-950 rounded-md w-50 h-70 md:w-70 md:h-70 md:pt-3 whitespace-pre-line text-center md:text-lg">
+          <div className="border-2 border-blue-950 rounded-md w-50 h-70 pt-5 md:w-70 md:h-70 md:pt-3 whitespace-pre-line text-center md:text-lg">
             {isLoading ? (
               <Loader
                 size={32}
@@ -80,7 +80,7 @@ export default function Home() {
           <h2 className="text-blue-950 font-semibold md:text-2xl md:pb-3">
             Lanchonete
           </h2>
-          <div className="border-2 border-blue-950 rounded-md w-50 h-70 md:w-70 md:h-70 md:pt-3 whitespace-pre-line text-center md:text-lg">
+          <div className="border-2 border-blue-950 rounded-md w-50 pt-5 h-70 md:w-70 md:h-70 md:pt-3 whitespace-pre-line text-center md:text-lg">
             {isLoading ? (
               <Loader
                 size={32}
