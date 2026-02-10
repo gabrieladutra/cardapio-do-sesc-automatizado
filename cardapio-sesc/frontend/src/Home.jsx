@@ -28,11 +28,11 @@ export default function Home() {
 
   if (data && data.restaurante) {
     dataTexto = data.restaurante.substring(0, 10)
-    menuRestaurante = data.restaurante.substring(10)
+    menuRestaurante = data.restaurante.substring(10).replace(/\n\s*\n+/g, "\n").trim() 
   }
 
   if (data && data.lanchonete) {
-    menuLanchonete = data.lanchonete.substring(10)
+    menuLanchonete = data.lanchonete.substring(10).replace(/\n\s*\n+/g, "\n").trim()
   }
 
   if (isError) {
@@ -62,7 +62,7 @@ export default function Home() {
           <h2 className="text-blue-950 font-semibold md:text-2xl md:pb-3">
             Restaurante
           </h2>
-          <div className="border-2 border-blue-950 rounded-md w-50 h-70 md:w-70 md:h-90 md:pt-3 whitespace-pre-line text-center md:text-lg">
+          <div className="border-2 border-blue-950 rounded-md w-50 h-70 md:w-70 md:h-70 md:pt-3 whitespace-pre-line text-center md:text-lg">
             {isLoading ? (
               <Loader
                 size={32}
@@ -80,7 +80,7 @@ export default function Home() {
           <h2 className="text-blue-950 font-semibold md:text-2xl md:pb-3">
             Lanchonete
           </h2>
-          <div className="border-2 border-blue-950 rounded-md w-50 h-70 md:w-70 md:h-90 md:pt-3 whitespace-pre-line text-center md:text-lg">
+          <div className="border-2 border-blue-950 rounded-md w-50 h-70 md:w-70 md:h-70 md:pt-3 whitespace-pre-line text-center md:text-lg">
             {isLoading ? (
               <Loader
                 size={32}
