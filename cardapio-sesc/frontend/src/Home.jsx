@@ -61,10 +61,10 @@ export default function Home() {
       <div className="flex flex-col md:flex-row gap-3 md:gap-8 mt-2 md:mt-10">
         {/* Restaurante */}
         <div className="flex flex-col items-center">
-          <h2 className="text-blue-950 font-semibold md:text-2xl">
+          <h2 className="text-blue-950 font-semibold md:text-2xl md:pb-3">
             Restaurante
           </h2>
-          <div className="border-2 border-blue-950 rounded-md w-50 h-70 md:w-70 md:h-67 whitespace-pre-line text-center md:text-lg">
+          <div className="border-2 border-blue-950 rounded-md w-50 h-70 md:w-70 md:h-90 md:pt-3 whitespace-pre-line text-center md:text-lg">
             {isLoading ? (
               <Loader
                 size={32}
@@ -77,12 +77,12 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Lanchonete */}
+    
         <div className="flex flex-col items-center">
-          <h2 className="text-blue-950 font-semibold md:text-2xl">
+          <h2 className="text-blue-950 font-semibold md:text-2xl md:pb-3">
             Lanchonete
           </h2>
-          <div className="border-2 border-blue-950 rounded-md w-50 h-70 md:w-70 md:h-67 whitespace-pre-line text-center md:text-lg">
+          <div className="border-2 border-blue-950 rounded-md w-50 h-70 md:w-70 md:h-90 md:pt-3 whitespace-pre-line text-center md:text-lg">
             {isLoading ? (
               <Loader
                 size={32}
@@ -98,9 +98,9 @@ export default function Home() {
 
       <button
         onClick={() => navigate("/menu-semanal/")}
-        className="rounded-md bg-green-700 text-white h-11 px-4 flex items-center gap-2 cursor-pointer mt-5 md:mb-8 md:mt-10"
+        className="rounded-md bg-green-700 text-white h-11 px-4 flex items-center gap-2 cursor-pointer mt-5 md:mb-8 md:mt-10 md:w-60 md:justify-center md:text-lg"
       >
-        <CircleChevronRight />
+        <CircleChevronRight/>
         Menu Semanal
       </button>
     </div>
