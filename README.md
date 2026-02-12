@@ -1,28 +1,52 @@
-## Cardápio do Sesc Automatizado  
-Automação para capturar o cardápio diário do Sesc, extrair o texto via OCR, detectar mudanças e enviar SMS automaticamente usando AWS.  
+### Cardápio do Sesc Automatizado  
+Automação para capturar o cardápio diário e semanal do Sesc da Esquina, extrair o texto via OCR, detectar mudanças e enviar SMS automaticamente usando AWS.  
+O SMS é mandado de segunda á sexta-feira ás 11:30 da manhã.</br>
+Acesse https://menu.gabrieladutra.com para conferir o menu funcionando.
 
 ### Aplicação
 
 ![Home](/assets/home.png)
 
+
+O usuário recebe dois SMS's com o Menu Diário do Restaurante e da Lanchonete podendo saber e escolher antecipadamente em qual local almoçar.
 ![SMS](/assets/smsPrint.jpeg)
 
 
 ### Arquitetura
 
-![Arquitetura](/assets/arch4.png)
+![Arquitetura](/assets/cloud.png)
 
 ---
 
-### Tecnologias
+### Tecnologias Utilizadas
 
-![Node.js](https://img.shields.io/badge/Node.js-18.x-339933?logo=node.js)
-![AWS Lambda](https://img.shields.io/badge/AWS-Lambda-orange?logo=awslambda)
-![DynamoDB](https://img.shields.io/badge/AWS-DynamoDB-4053D6?logo=amazondynamodb)
-![SNS](https://img.shields.io/badge/AWS-SNS-DD344C?logo=amazonaws)
-![EventBridge](https://img.shields.io/badge/AWS-EventBridge-FF4F8B?logo=amazonaws)
-![OCR](https://img.shields.io/badge/OCR-Tesseract-blue)
-![Status](https://img.shields.io/badge/Status-Operacional-brightgreen)
+#### Frontend 
+
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-0F172A?style=for-the-badge&logo=tailwind-css&logoColor=38B2AC)
+
+#### Backend
+
+![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
+
+
+#### OCR / Manipulação de Imagem
+
+![Tesseract.js](https://img.shields.io/badge/Tesseract.js-5A4FCF?style=for-the-badge&logo=tesseract&logoColor=white)
+![Jimp](https://img.shields.io/badge/Jimp.js-1C1C1C?style=for-the-badge)
+![Puppeteer](https://img.shields.io/badge/Puppeteer-40B5A4?style=for-the-badge&logo=puppeteer&logoColor=white)
+
+#### Cloud AWS
+
+![AWS S3](https://img.shields.io/badge/AWS_S3-FF9900?style=for-the-badge&logo=amazons3&logoColor=white)
+![AWS DynamoDB](https://img.shields.io/badge/AWS_DynamoDB-4053D6?style=for-the-badge&logo=amazondynamodb&logoColor=white)
+![AWS Lambda](https://img.shields.io/badge/AWS_Lambda-FF9900?style=for-the-badge&logo=awslambda&logoColor=white)
+![AWS CloudWatch](https://img.shields.io/badge/AWS_CloudWatch-FF4F8B?style=for-the-badge&logo=amazoncloudwatch&logoColor=white)
+![AWS EventBridge](https://img.shields.io/badge/AWS_EventBridge-FF4F8B?style=for-the-badge&logo=amazoneventbridge&logoColor=white)
+![AWS CloudFront](https://img.shields.io/badge/AWS_CloudFront-232F3E?style=for-the-badge&logo=amazoncloudfront&logoColor=white)
+![AWS Route53](https://img.shields.io/badge/AWS_Route_53-8C4FFF?style=for-the-badge&logo=amazonroute53&logoColor=white)
+![AWS SNS](https://img.shields.io/badge/AWS_SNS-DD344C?style=for-the-badge&logo=amazonsns&logoColor=white)
+
 
 ---
 
