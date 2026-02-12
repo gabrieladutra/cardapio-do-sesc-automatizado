@@ -21,15 +21,18 @@ O usuário recebe dois SMS's com o Menu Diário do Restaurante e da Lanchonete p
 ### Tecnologias Utilizadas
 
 #### Frontend
+
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-0F172A?style=for-the-badge&logo=tailwindcss&logoColor=38B2AC)
 
 #### OCR & Processamento de Imagem
+
 ![Tesseract.js](https://img.shields.io/badge/Tesseract.js-5A4FCF?style=for-the-badge&logo=tesseract&logoColor=white)
 ![Jimp](https://img.shields.io/badge/Jimp.js-1C1C1C?style=for-the-badge&logo=javascript&logoColor=yellow)
 ![Puppeteer](https://img.shields.io/badge/Puppeteer-40B5A4?style=for-the-badge&logo=puppeteer&logoColor=white)
 
 #### AWS
+
 ![Amazon S3](https://img.shields.io/badge/Amazon_S3-FF9900?style=for-the-badge&logo=amazons3&logoColor=white)
 ![Amazon DynamoDB](https://img.shields.io/badge/Amazon_DynamoDB-4053D6?style=for-the-badge&logo=amazondynamodb&logoColor=white)
 ![AWS Lambda](https://img.shields.io/badge/AWS_Lambda-FF9900?style=for-the-badge&logo=awslambda&logoColor=white)
