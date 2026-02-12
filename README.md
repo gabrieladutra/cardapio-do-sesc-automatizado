@@ -20,32 +20,24 @@ O usuário recebe dois SMS's com o Menu Diário do Restaurante e da Lanchonete p
 
 ### Tecnologias Utilizadas
 
-#### Frontend 
-
+#### Frontend
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
-![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-0F172A?style=for-the-badge&logo=tailwind-css&logoColor=38B2AC)
+![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-0F172A?style=for-the-badge&logo=tailwindcss&logoColor=38B2AC)
 
-#### Backend
-
-![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
-
-
-#### OCR / Manipulação de Imagem
-
+#### OCR & Processamento de Imagem
 ![Tesseract.js](https://img.shields.io/badge/Tesseract.js-5A4FCF?style=for-the-badge&logo=tesseract&logoColor=white)
-![Jimp](https://img.shields.io/badge/Jimp.js-1C1C1C?style=for-the-badge)
+![Jimp](https://img.shields.io/badge/Jimp.js-1C1C1C?style=for-the-badge&logo=javascript&logoColor=yellow)
 ![Puppeteer](https://img.shields.io/badge/Puppeteer-40B5A4?style=for-the-badge&logo=puppeteer&logoColor=white)
 
-#### Cloud AWS
-
-![AWS S3](https://img.shields.io/badge/AWS_S3-FF9900?style=for-the-badge&logo=amazons3&logoColor=white)
-![AWS DynamoDB](https://img.shields.io/badge/AWS_DynamoDB-4053D6?style=for-the-badge&logo=amazondynamodb&logoColor=white)
+#### AWS
+![Amazon S3](https://img.shields.io/badge/Amazon_S3-FF9900?style=for-the-badge&logo=amazons3&logoColor=white)
+![Amazon DynamoDB](https://img.shields.io/badge/Amazon_DynamoDB-4053D6?style=for-the-badge&logo=amazondynamodb&logoColor=white)
 ![AWS Lambda](https://img.shields.io/badge/AWS_Lambda-FF9900?style=for-the-badge&logo=awslambda&logoColor=white)
-![AWS CloudWatch](https://img.shields.io/badge/AWS_CloudWatch-FF4F8B?style=for-the-badge&logo=amazoncloudwatch&logoColor=white)
-![AWS EventBridge](https://img.shields.io/badge/AWS_EventBridge-FF4F8B?style=for-the-badge&logo=amazoneventbridge&logoColor=white)
-![AWS CloudFront](https://img.shields.io/badge/AWS_CloudFront-232F3E?style=for-the-badge&logo=amazoncloudfront&logoColor=white)
-![AWS Route53](https://img.shields.io/badge/AWS_Route_53-8C4FFF?style=for-the-badge&logo=amazonroute53&logoColor=white)
-![AWS SNS](https://img.shields.io/badge/AWS_SNS-DD344C?style=for-the-badge&logo=amazonsns&logoColor=white)
+![Amazon CloudWatch](https://img.shields.io/badge/Amazon_CloudWatch-FF4F8B?style=for-the-badge&logo=amazoncloudwatch&logoColor=white)
+![Amazon EventBridge](https://img.shields.io/badge/Amazon_EventBridge-FF4F8B?style=for-the-badge&logo=amazoneventbridge&logoColor=white)
+![Amazon CloudFront](https://img.shields.io/badge/Amazon_CloudFront-232F3E?style=for-the-badge&logo=amazoncloudfront&logoColor=white)
+![Amazon Route 53](https://img.shields.io/badge/Amazon_Route_53-8C4FFF?style=for-the-badge&logo=amazonroute53&logoColor=white)
+![Amazon SNS](https://img.shields.io/badge/Amazon_SNS-DD344C?style=for-the-badge&logo=amazonsns&logoColor=white)
 
 
 ---
