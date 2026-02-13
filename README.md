@@ -20,11 +20,8 @@ Acesse https://menu.gabrieladutra.com para conferir o menu funcionando.
 O usuário recebe dois SMS's com o Menu Diário do Restaurante e da Lanchonete podendo saber e escolher antecipadamente em qual local almoçar.
 
 <p align="center">
-  <img src="/assets/smsPrint.jpeg" width="500"/>
+  <img src="/assets/smsPrint.jpeg" height="500"/>
 </p>
-
-
-
 
 ---
 
@@ -43,14 +40,14 @@ O usuário recebe dois SMS's com o Menu Diário do Restaurante e da Lanchonete p
 
 #### AWS
 
-![Amazon S3](https://img.shields.io/badge/Amazon_S3-FF9900?style=for-the-badge&logo=amazons3&logoColor=white)
-![Amazon DynamoDB](https://img.shields.io/badge/Amazon_DynamoDB-4053D6?style=for-the-badge&logo=amazondynamodb&logoColor=white)
+![AWS S3](https://img.shields.io/badge/AWS_S3-FF9900?style=for-the-badge&logo=AWSs3&logoColor=white)
+![AWS DynamoDB](https://img.shields.io/badge/AWS_DynamoDB-4053D6?style=for-the-badge&logo=AWSdynamodb&logoColor=white)
 ![AWS Lambda](https://img.shields.io/badge/AWS_Lambda-FF9900?style=for-the-badge&logo=awslambda&logoColor=white)
-![Amazon CloudWatch](https://img.shields.io/badge/Amazon_CloudWatch-FF4F8B?style=for-the-badge&logo=amazoncloudwatch&logoColor=white)
-![Amazon EventBridge](https://img.shields.io/badge/Amazon_EventBridge-FF4F8B?style=for-the-badge&logo=amazoneventbridge&logoColor=white)
-![Amazon CloudFront](https://img.shields.io/badge/Amazon_CloudFront-232F3E?style=for-the-badge&logo=amazoncloudfront&logoColor=white)
-![Amazon Route 53](https://img.shields.io/badge/Amazon_Route_53-8C4FFF?style=for-the-badge&logo=amazonroute53&logoColor=white)
-![Amazon SNS](https://img.shields.io/badge/Amazon_SNS-DD344C?style=for-the-badge&logo=amazonsns&logoColor=white)
+![AWS CloudWatch](https://img.shields.io/badge/AWS_CloudWatch-FF4F8B?style=for-the-badge&logo=AWScloudwatch&logoColor=white)
+![AWS EventBridge](https://img.shields.io/badge/AWS_EventBridge-FF4F8B?style=for-the-badge&logo=AWSeventbridge&logoColor=white)
+![AWS CloudFront](https://img.shields.io/badge/AWS_CloudFront-232F3E?style=for-the-badge&logo=AWScloudfront&logoColor=white)
+![AWS Route 53](https://img.shields.io/badge/AWS_Route_53-8C4FFF?style=for-the-badge&logo=AWSroute53&logoColor=white)
+![AWS SNS](https://img.shields.io/badge/AWS_SNS-DD344C?style=for-the-badge&logo=AWSsns&logoColor=white)
 
 
 ---
