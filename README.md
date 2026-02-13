@@ -8,13 +8,13 @@ Acesse https://menu.gabrieladutra.com para conferir o menu funcionando.
 ### Aplicação
 
 <p align="center">
-  <img src="/assets/home.png" width="750"/>
+  <img src="/assets/home.png" width="500" height="500"/>
 </p>
 
 ### Arquitetura
 
 <p align="center">
-  <img src="/assets/cloud.png" width="900"/>
+  <img src="/assets/cloud.png" width="750" height="500"/>
 </p>
 
 
