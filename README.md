@@ -70,4 +70,4 @@ O usuário recebe dois SMS's com o Menu Diário do Restaurante e da Lanchonete p
 
 ### Objetivo 
 
-Esse projeto foi idealizado para oferecer aos usuários as informações do menu de forma estruturada e rápida. Durante o desenvolvimento do site coloquei em prática os meus conhecimentos em frontend e backend. Conheci e utilizei novos serviços da AWS e ŕetendo adicionar novas funcionalidades e recuperar novas informações no futuro.
+Esse projeto foi idealizado para oferecer aos usuários as informações do menu de forma estruturada e rápida. Durante o desenvolvimento do site coloquei em prática os meus conhecimentos em frontend e backend. Conheci e utilizei novos serviços da AWS e pretendo adicionar novas funcionalidades e recuperar novas informações no futuro.
