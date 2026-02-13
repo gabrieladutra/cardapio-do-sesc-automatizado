@@ -5,16 +5,30 @@ Acesse https://menu.gabrieladutra.com para conferir o menu funcionando.
 
 ### Aplicação
 
-![Home](/assets/home.png)
+### Aplicação
 
-
-O usuário recebe dois SMS's com o Menu Diário do Restaurante e da Lanchonete podendo saber e escolher antecipadamente em qual local almoçar.
-![SMS](/assets/smsPrint.jpeg)
-
+<p align="center">
+  <img src="/assets/home.png" width="750"/>
+</p>
 
 ### Arquitetura
 
-![Arquitetura](/assets/cloud.png)
+<p align="center">
+  <img src="/assets/cloud.png" width="900"/>
+</p>
+
+
+
+### Envio de SMS 
+
+O usuário recebe dois SMS's com o Menu Diário do Restaurante e da Lanchonete podendo saber e escolher antecipadamente em qual local almoçar.
+
+<p align="center">
+  <img src="/assets/smsPrint.jpeg" width="500"/>
+</p>
+
+
+
 
 ---
 
@@ -55,3 +69,5 @@ O usuário recebe dois SMS's com o Menu Diário do Restaurante e da Lanchonete p
 6. Controlar a execução da função **Lambda** de Segunda á Sexta ás 11:00 usando o **EventBridge**
 
 ---
+
+#### Deploy
