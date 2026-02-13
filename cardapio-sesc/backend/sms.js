@@ -15,6 +15,6 @@ export default async function handler() {
     const restMsg = await getRestMessage();
     const lanMsg = await getLanMessage();
 
-    await sendMessage("Menu Restaurante: ",restMsg);
-    await sendMessage("Menu Lanchonete: ",lanMsg);
+    await sendMessage(`Menu Restaurante: ${restMsg}`);
+    await sendMessage(`Menu Lanchonete: ${lanMsg}`);
 }
