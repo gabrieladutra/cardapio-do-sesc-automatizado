@@ -3,21 +3,17 @@ Automação para capturar o cardápio diário e semanal do Sesc da Esquina, extr
 O SMS é mandado de segunda á sexta-feira ás 11:30 da manhã.</br>
 Acesse https://menu.gabrieladutra.com para conferir o menu funcionando.
 
-### Aplicação
-
-### Aplicação
-
-<p align="center">
-  <img src="/assets/home.png" width="500" height="500"/>
-</p>
-
 ### Arquitetura
 
 <p align="center">
   <img src="/assets/cloud.png" width="750" height="500"/>
 </p>
 
+### Aplicação
 
+<p align="center">
+  <img src="/assets/home.png" width="500" height="500"/>
+</p>
 
 ### Envio de SMS 
 
