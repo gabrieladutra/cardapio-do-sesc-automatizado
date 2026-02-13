@@ -1,6 +1,7 @@
 import { CircleChevronRight, Loader, CircleX } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 import { useQuery } from "@tanstack/react-query"
+import githubLogo from "../assets/github.png"
 
 async function fetchMenu() {
   const response = await fetch(
@@ -47,6 +48,8 @@ export default function Home() {
 
   return (
     <div className="w-full min-h-screen bg-white flex flex-col items-center">
+      <div className="w-full h-full mr-0 flex  justify-end cursor-pointer"><a href="https://github.com/gabrieladutra/cardapio-do-sesc-automatizado" target="_blank"><img className="h-10 " src={githubLogo} alt="GitHub" /></a></div>
+
       <h1 className="text-yellow-600 text-2xl mt-2 md:text-4xl md:mt-4">
         MENU DIÁRIO
       </h1>
@@ -62,7 +65,7 @@ export default function Home() {
           <h2 className="text-blue-950 font-semibold md:text-2xl md:pb-3">
             Restaurante
           </h2>
-          <div className="border-2 border-blue-950 rounded-md w-50 h-70 pt-5 md:w-70 md:h-70 md:pt-3 whitespace-pre-line text-center md:text-lg">
+          <div className="border-2 border-blue-950 rounded-md w-50 h-70 pt-5 md:w-70 md:h-75 md:pt-3 whitespace-pre-line text-center md:text-lg">
             {isLoading ? (
               <Loader
                 size={32}
@@ -80,7 +83,7 @@ export default function Home() {
           <h2 className="text-blue-950 font-semibold md:text-2xl md:pb-3">
             Lanchonete
           </h2>
-          <div className="border-2 border-blue-950 rounded-md w-50 pt-5 h-70 md:w-70 md:h-70 md:pt-3 whitespace-pre-line text-center md:text-lg">
+          <div className="border-2 border-blue-950 rounded-md w-50 pt-5 h-70 md:w-70 md:h-75 md:pt-3 whitespace-pre-line text-center md:text-lg">
             {isLoading ? (
               <Loader
                 size={32}
