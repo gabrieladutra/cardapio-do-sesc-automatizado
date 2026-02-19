@@ -5,14 +5,14 @@ import Jimp from "jimp"
 const dynamo = new DynamoDBClient({ region: 'sa-east-1' });
 
 export async function handler(event) {
-  // CORS preflight
-//   if (event.requestContext?.http?.method === "OPTIONS") {
-//     return {
-//       statusCode: 200,
-//       headers: corsHeaders(),
-//       body: "",
-//     }
-//   }
+  //CORS preflight
+  if (event.requestContext?.http?.method === "OPTIONS") {
+    return {
+      statusCode: 200,
+      headers: corsHeaders(),
+      body: "",
+    }
+  }
 
   try {
     await processMenu()
@@ -163,4 +163,4 @@ async function verifyVersion(date) {
     return data.Items;
 }
 //module.exports.handler = handler
-handler()
+//handler()
