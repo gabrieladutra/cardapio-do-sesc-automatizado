@@ -6,13 +6,13 @@ const dynamo = new DynamoDBClient({ region: 'sa-east-1' });
 
 export async function handler(event) {
   // CORS preflight
-  if (event.requestContext?.http?.method === "OPTIONS") {
-    return {
-      statusCode: 200,
-      headers: corsHeaders(),
-      body: "",
-    }
-  }
+//   if (event.requestContext?.http?.method === "OPTIONS") {
+//     return {
+//       statusCode: 200,
+//       headers: corsHeaders(),
+//       body: "",
+//     }
+//   }
 
   try {
     await processMenu()
@@ -105,20 +105,23 @@ async function processMenu() {
 }
 async function getText(name, cropped, croppedData) {
     const worker = await createWorker('eng');
-    //Descomentar para ajudar na depuração
-    // const file = './' + name + '.png'
-    // await cropped.writeAsync(file)
-    // console.log('Escrito arquivo ' + file)
+    // // //Descomentar para ajudar na depuração
+    const file = './' + name + '.png'
+    await cropped.writeAsync(file)
+    console.log('Escrito arquivo ' + file)
     const buffer = await cropped.getBufferAsync("image/png")
     const bufferData = await croppedData.getBufferAsync("image/png")
     const texto = await worker.recognize(buffer)
     const data = await worker.recognize(bufferData)
     const menu = {
-        text: texto.data.text,
+        text: texto.data.text.includes(" ") || !texto.data.text  || texto.data.text.length <= 5 ?  "Fechado" : texto.data.text,
         date: data.data.text,
     }
+   
     console.log('---- TEXTO RECONHECIDO ----')
     console.log(`Data: ${menu.date} \n${menu.text}`);
+    
+
     await worker.terminate();
     return menu
 }
@@ -160,4 +163,4 @@ async function verifyVersion(date) {
     return data.Items;
 }
 //module.exports.handler = handler
-//handler()
+handler()
