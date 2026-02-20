@@ -106,9 +106,9 @@ async function processMenu() {
 async function getText(name, cropped, croppedData) {
     const worker = await createWorker('eng');
     //Descomentar para ajudar na depuração
-    const file = './' + name + '.png'
-   await cropped.writeAsync(file)
-    console.log('Escrito arquivo ' + file)
+   //const file = './' + name + '.png'
+   //await cropped.writeAsync(file)
+    //console.log('Escrito arquivo ' + file)
     const buffer = await cropped.getBufferAsync("image/png")
     const bufferData = await croppedData.getBufferAsync("image/png")
     const texto = await worker.recognize(buffer)
@@ -163,4 +163,4 @@ async function verifyVersion(date) {
     return data.Items;
 }
 //module.exports.handler = handler
-handler()
+//handler()
