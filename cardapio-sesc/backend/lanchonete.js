@@ -114,7 +114,7 @@ async function getText(name, cropped, croppedData) {
     const texto = await worker.recognize(buffer)
     const data = await worker.recognize(bufferData)
     const menu = {
-        text: texto.data.text.includes(" ") || !texto.data.text  || texto.data.text.length <= 5 ?  "Fechado" : texto.data.text,
+        text: texto.data.text.includes("") || !texto.data.text  || texto.data.text.length <= 5 ?  "Fechado" : texto.data.text,
         date: data.data.text,
     }
    
