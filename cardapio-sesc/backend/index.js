@@ -1,7 +1,7 @@
 import { DynamoDBClient, PutItemCommand, QueryCommand } from "@aws-sdk/client-dynamodb"
 import { parse } from "node-html-parser"
 import { createWorker } from "tesseract.js"
-import Jimp from "jimp"
+import { Jimp } from "jimp"
 
 const dynamo = new DynamoDBClient({ region: "sa-east-1" })
 
