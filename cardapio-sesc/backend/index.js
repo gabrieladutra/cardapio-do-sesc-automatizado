@@ -1,19 +1,19 @@
 import { DynamoDBClient, PutItemCommand, QueryCommand } from "@aws-sdk/client-dynamodb"
 import { parse } from "node-html-parser"
 import { createWorker } from "tesseract.js"
-import { Jimp } from "jimp"
+import {Jimp} from "jimp"
 
 const dynamo = new DynamoDBClient({ region: "sa-east-1" })
 
 export async function handler(event) {
   // CORS preflight
-  if (event.requestContext?.http?.method === "OPTIONS") {
-    return {
-      statusCode: 200,
-      headers: corsHeaders(),
-      body: "",
-    }
-  }
+  // if (event.requestContext?.http?.method === "OPTIONS") {
+  //   return {
+  //     statusCode: 200,
+  //     headers: corsHeaders(),
+  //     body: "",
+  //   }
+  // }
 
   try {
     await processMenu()
@@ -49,9 +49,12 @@ async function processMenu() {
 
   const html = await response.text()
   const root = parse(html)
-  const img = root.querySelector(".alignnone")
-  const src = img.getAttribute("src")
+ const img = root.querySelector(".entry-content img")
 
+  if(img == null){
+    throw new Error("Mudança no seletor da classe que contem a img. Corrija o seletor")
+  }
+  const src = img.getAttribute("src")
   const image = await Jimp.read(src)
   const imageWidth = image.bitmap.width
   const imageHeight = image.bitmap.height
@@ -81,10 +84,23 @@ async function processMenu() {
   const days = []
 
   for (let i = 0; i < 5; i++) {
-    const menuCrop = image.clone().crop(crops[i], marginTop, filledWidth, height)
-    const dateCrop = image.clone().crop(crops[i], dateMarginTop, filledWidth, dateHeight)
+    // const menuCrop = image.clone().crop(crops[i], marginTop, filledWidth, height)
+    const menuCrop = image.clone().crop({
+      h: height,
+      w: filledWidth,
+      x: crops[i],
+      y: marginTop,
+    })
+    
+    // const dateCrop = image.clone().crop(crops[i], dateMarginTop, filledWidth, dateHeight)
+    const dateCrop = image.clone().crop({ h: dateHeight,
+      w: filledWidth,
+      x: crops[i],
+      y: dateMarginTop,
+    })
     days.push(await getText(menuCrop, dateCrop))
   }
+  console.log(JSON.stringify(days))
 
   for (const dia of days) {
     const versions = await verifyVersion(dia.date)
@@ -107,11 +123,31 @@ async function processMenu() {
   }
 }
 
+// async function getText(cropped, croppedData) {
+//   const worker = await createWorker("eng")
+
+//   const buffer = await cropped.getBufferAsync("image/png")
+//   const bufferData = await croppedData.getBufferAsync("image/png")
+
+//   const texto = await worker.recognize(buffer)
+//   const data = await worker.recognize(bufferData)
+
+//   await worker.terminate()
+
+//   return {
+//     text: texto.data.text,
+//     date: data.data.text,
+//   }
+// }
+
 async function getText(cropped, croppedData) {
   const worker = await createWorker("eng")
-
-  const buffer = await cropped.getBufferAsync("image/png")
-  const bufferData = await croppedData.getBufferAsync("image/png")
+// // //Descomentar para ajudar na depuração
+    // const file = './' + "teste" + '.png'
+    // await cropped.writeAsync(file)
+    // console.log('Escrito arquivo ' + file)
+  const buffer = await cropped.getBuffer("image/png")
+  const bufferData = await croppedData.getBuffer("image/png")
 
   const texto = await worker.recognize(buffer)
   const data = await worker.recognize(bufferData)
@@ -149,3 +185,4 @@ async function verifyVersion(date) {
   const data = await dynamo.send(new QueryCommand(params))
   return data.Items ?? []
 }
+handler()
