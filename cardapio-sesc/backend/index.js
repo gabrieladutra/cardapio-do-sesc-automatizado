@@ -6,14 +6,14 @@ import {Jimp} from "jimp"
 const dynamo = new DynamoDBClient({ region: "sa-east-1" })
 
 export async function handler(event) {
-  // CORS preflight
-  // if (event.requestContext?.http?.method === "OPTIONS") {
-  //   return {
-  //     statusCode: 200,
-  //     headers: corsHeaders(),
-  //     body: "",
-  //   }
-  // }
+  //CORS preflight
+  if (event.requestContext?.http?.method === "OPTIONS") {
+    return {
+      statusCode: 200,
+      headers: corsHeaders(),
+      body: "",
+    }
+  }
 
   try {
     await processMenu()
@@ -155,8 +155,8 @@ async function getText(cropped, croppedData) {
   await worker.terminate()
 
   return {
-    text: texto.data.text,
-    date: data.data.text,
+    text: texto.data.text.trim(),
+    date: data.data.text.trim(),
   }
 }
 
@@ -185,4 +185,4 @@ async function verifyVersion(date) {
   const data = await dynamo.send(new QueryCommand(params))
   return data.Items ?? []
 }
-handler()
+//handler()
