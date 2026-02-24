@@ -5,40 +5,40 @@ import Jimp from "jimp"
 const dynamo = new DynamoDBClient({ region: 'sa-east-1' });
 
 export async function handler(event) {
-  //CORS preflight
-//   if (event.requestContext?.http?.method === "OPTIONS") {
-//     return {
-//       statusCode: 200,
-//       headers: corsHeaders(),
-//       body: "",
-//     }
-//   }
+    //CORS preflight
+    //   if (event.requestContext?.http?.method === "OPTIONS") {
+    //     return {
+    //       statusCode: 200,
+    //       headers: corsHeaders(),
+    //       body: "",
+    //     }
+    //   }
 
-  try {
-    await processMenu()
+    try {
+        await processMenu()
 
-    return {
-      statusCode: 200,
-      headers: corsHeaders(),
-      body: JSON.stringify({ ok: true }),
+        return {
+            statusCode: 200,
+            headers: corsHeaders(),
+            body: JSON.stringify({ ok: true }),
+        }
+    } catch (error) {
+        console.error(error)
+
+        return {
+            statusCode: 500,
+            headers: corsHeaders(),
+            body: JSON.stringify({ error: "Erro interno" }),
+        }
     }
-  } catch (error) {
-    console.error(error)
-
-    return {
-      statusCode: 500,
-      headers: corsHeaders(),
-      body: JSON.stringify({ error: "Erro interno" }),
-    }
-  }
 }
 
 function corsHeaders() {
-  return {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Headers": "*",
-    "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
-  }
+    return {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "*",
+        "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
+    }
 }
 
 async function processMenu() {
@@ -56,15 +56,15 @@ async function processMenu() {
     const totalEmpty = (squares * proportion) + emptySpaces
     const emptySpaceWidth = (imageWidth / totalEmpty)
     const filledWidth = emptySpaceWidth * proportion
-    
+
     const marginTop = imageHeight * 0.42
     const height = imageHeight * 0.31
- 
+
     const cropSegunda = image.clone().crop(emptySpaceWidth, marginTop, filledWidth, height);
-    const cropTerca = image.clone().crop((2 * emptySpaceWidth) + filledWidth, marginTop,filledWidth, height);
-    const cropQuarta = image.clone().crop((3 * emptySpaceWidth) + (2 * filledWidth) ,marginTop, filledWidth, height)
-    const cropQuinta = image.clone().crop((4 * emptySpaceWidth) + (3 * filledWidth) ,marginTop, filledWidth, height)
-    const cropSexta = image.clone().crop((5 * emptySpaceWidth) + (4 * filledWidth) ,marginTop, filledWidth, height)
+    const cropTerca = image.clone().crop((2 * emptySpaceWidth) + filledWidth, marginTop, filledWidth, height);
+    const cropQuarta = image.clone().crop((3 * emptySpaceWidth) + (2 * filledWidth), marginTop, filledWidth, height)
+    const cropQuinta = image.clone().crop((4 * emptySpaceWidth) + (3 * filledWidth), marginTop, filledWidth, height)
+    const cropSexta = image.clone().crop((5 * emptySpaceWidth) + (4 * filledWidth), marginTop, filledWidth, height)
 
     const dateHeight = imageHeight * 0.04
     const dateMarginTop = imageHeight * 0.37
@@ -101,26 +101,26 @@ async function processMenu() {
             await saveToDynamoDB(diaAtual, novaVersao);
         }
     }
-   
+
 }
 async function getText(name, cropped, croppedData) {
     const worker = await createWorker('eng');
     //Descomentar para ajudar na depuração
-   //const file = './' + name + '.png'
-   //await cropped.writeAsync(file)
+    //const file = './' + name + '.png'
+    //await cropped.writeAsync(file)
     //console.log('Escrito arquivo ' + file)
     const buffer = await cropped.getBufferAsync("image/png")
     const bufferData = await croppedData.getBufferAsync("image/png")
     const texto = await worker.recognize(buffer)
     const data = await worker.recognize(bufferData)
     const menu = {
-        text: !texto.data.text || texto.data.text <= 10 ?  "Fechado" : texto.data.text,
+        text: !texto.data.text || texto.data.text <= 2 ||  ? "Fechado" : texto.data.text,
         date: data.data.text,
     }
-   
+
     console.log('---- TEXTO RECONHECIDO ----')
     console.log(`Data: ${menu.date} \n${menu.text}`);
-    
+
 
     await worker.terminate();
     return menu
@@ -139,7 +139,7 @@ async function saveToDynamoDB(menu, versao) {
 
     await dynamo.send(new PutItemCommand(params));
     console.log('Item salvo no DynamoDB:', menu.date);
-} 
+}
 
 async function verifyVersion(date) {
     const params = {
