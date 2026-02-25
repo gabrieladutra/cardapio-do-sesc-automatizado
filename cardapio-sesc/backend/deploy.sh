@@ -6,5 +6,5 @@ aws lambda update-function-code --function-name ocrRestaurantToDynamo --zip-file
 aws lambda update-function-code --function-name ocrLanchoneteToDynamo --zip-file fileb://puppeteer.zip --profile gabriela --region sa-east-1 --no-cli-pager
 aws lambda update-function-code --function-name sendSMS --zip-file fileb://puppeteer.zip --profile gabriela --region sa-east-1 --no-cli-pager
 aws lambda update-function-code --function-name getDailyMenuToFrontendAPI --zip-file fileb://puppeteer.zip --profile gabriela --region sa-east-1 --no-cli-pager
-aws lambda update-function-code --function-name getWeeklyMenu --zip-file fileb://puppeteer.zip --profile gabriela --region sa-east-1 --no-cli-pager
+aws lambda update-function-code --function-name getWeeklyMenuToFrontendAPI --zip-file fileb://puppeteer.zip --profile gabriela --region sa-east-1 --no-cli-pager
 rm puppeteer.zip

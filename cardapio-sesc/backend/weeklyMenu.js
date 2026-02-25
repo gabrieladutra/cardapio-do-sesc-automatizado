@@ -66,7 +66,7 @@ export async function getWeeklyMenuLan(semana) {
   return await getWeeklyMenu('lanchonete', semana);
 }
 
-export default async function handler() {
+export async function handler() {
   const semana = await getWeekDates()
   const restMenu = await getWeeklyMenuRest(semana)
   const lanMenu = await getWeeklyMenuLan(semana)
