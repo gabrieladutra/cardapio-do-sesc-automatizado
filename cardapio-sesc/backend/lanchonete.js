@@ -43,17 +43,26 @@ function corsHeaders() {
 }
 
 async function processMenu() {
-    const response = await fetch('https://www.sescpr.com.br/unidade/sesc-da-esquina/espaco/lanchonete/');
-    const html = await response.text();
-    const root = parse(html);
-    const img = root.querySelector('.alignnone.size-full');
-    let src = img.getAttribute('src');
-    const image = await Jimp.read(src);
-    const imageWidth = image.bitmap.width
-    const imageHeight = image.bitmap.height
-    const squares = 5
-    const emptySpaces = 6
-    const proportion = 14.314285714
+     const response = await fetch(
+    "https://www.sescpr.com.br/unidade/sesc-da-esquina/espaco/lanchonete/"
+  )
+
+  const html = await response.text()
+  const root = parse(html)
+ const img = root.querySelector('.entry-content p>img')
+
+  if(img == null){
+    throw new Error("Mudança no seletor da classe que contem a img. Corrija o seletor")
+  }
+  const src = img.getAttribute("src")
+  const image = await Jimp.read(src)
+  const imageWidth = image.bitmap.width
+  const imageHeight = image.bitmap.height
+
+  const squares = 5
+  const emptySpaces = 6
+  const proportion = 14.314285714
+
     const totalEmpty = (squares * proportion) + emptySpaces
     const emptySpaceWidth = (imageWidth / totalEmpty)
     const filledWidth = emptySpaceWidth * proportion
@@ -61,70 +70,76 @@ async function processMenu() {
     const marginTop = imageHeight * 0.42
     const height = imageHeight * 0.31
 
-    const cropSegunda = image.clone().crop(emptySpaceWidth, marginTop, filledWidth, height);
-    const cropTerca = image.clone().crop((2 * emptySpaceWidth) + filledWidth, marginTop, filledWidth, height);
-    const cropQuarta = image.clone().crop((3 * emptySpaceWidth) + (2 * filledWidth), marginTop, filledWidth, height)
-    const cropQuinta = image.clone().crop((4 * emptySpaceWidth) + (3 * filledWidth), marginTop, filledWidth, height)
-    const cropSexta = image.clone().crop((5 * emptySpaceWidth) + (4 * filledWidth), marginTop, filledWidth, height)
+   const crops = [
+    emptySpaceWidth,
+    (2 * emptySpaceWidth) + filledWidth,
+    (3 * emptySpaceWidth) + (2 * filledWidth),
+    (4 * emptySpaceWidth) + (3 * filledWidth),
+    (5 * emptySpaceWidth) + (4 * filledWidth),
+  ]
 
-    const dateHeight = imageHeight * 0.04
-    const dateMarginTop = imageHeight * 0.37
+  const dateMarginTop = imageHeight * 0.37
+  const dateHeight = imageHeight * 0.04
 
-    const cropDataSegunda = image.clone().crop(emptySpaceWidth, dateMarginTop, filledWidth, dateHeight)
-    const cropDataTerca = image.clone().crop((2 * emptySpaceWidth) + filledWidth, dateMarginTop, filledWidth, dateHeight)
-    const cropDataQuarta = image.clone().crop((3 * emptySpaceWidth) + (2 * filledWidth), dateMarginTop, filledWidth, dateHeight)
-    const cropDataQuinta = image.clone().crop((4 * emptySpaceWidth) + (3 * filledWidth), dateMarginTop, filledWidth, dateHeight)
-    const cropDataSexta = image.clone().crop((5 * emptySpaceWidth) + (4 * filledWidth), dateMarginTop, filledWidth, dateHeight)
+  const days = []
 
-    const segunda = await getText('segunda', cropSegunda, cropDataSegunda)
-    const terca = await getText('terca', cropTerca, cropDataTerca)
-    const quarta = await getText('quarta', cropQuarta, cropDataQuarta)
-    const quinta = await getText('quinta', cropQuinta, cropDataQuinta)
-    const sexta = await getText('sexta', cropSexta, cropDataSexta)
+  for (let i = 0; i < 5; i++) {
+    // const menuCrop = image.clone().crop(crops[i], marginTop, filledWidth, height)
+    const menuCrop = image.clone().crop({
+      h: height,
+      w: filledWidth,
+      x: crops[i],
+      y: marginTop,
+    })
+    
+    // const dateCrop = image.clone().crop(crops[i], dateMarginTop, filledWidth, dateHeight)
+    const dateCrop = image.clone().crop({ h: dateHeight,
+      w: filledWidth,
+      x: crops[i],
+      y: dateMarginTop,
+    })
+    days.push(await getText(menuCrop, dateCrop))
+  }
+  console.log(JSON.stringify(days))
 
-    const menus = [segunda, terca, quarta, quinta, sexta]
-    for (const diaAtual of menus) {
-        const version = await verifyVersion(diaAtual.date)
-        if (version.length === 0) {
-            await saveToDynamoDB(diaAtual, 1)
-            continue;
-        }
+  for (const dia of days) {
+    const versions = await verifyVersion(dia.date)
 
-        let maior = version[0];
-
-        for (let i = 1; i < version.length; i++) {
-            if (parseInt(version[i].versao.N) > parseInt(maior.versao.N)) {
-                maior = version[i];
-            }
-        }
-        if (maior.texto.S.trim() !== diaAtual.text.trim()) {
-            const novaVersao = parseInt(maior.versao.N) + 1;
-            await saveToDynamoDB(diaAtual, novaVersao);
-        }
+    if (versions.length === 0) {
+      await saveToDynamoDB(dia, 1)
+      continue
     }
 
+    let maior = versions[0]
+    for (const v of versions) {
+      if (parseInt(v.versao.N) > parseInt(maior.versao.N)) {
+        maior = v
+      }
+    }
+
+    if (maior.texto.S.trim() !== dia.text.trim()) {
+      await saveToDynamoDB(dia, parseInt(maior.versao.N) + 1)
+    }
+  }
 }
-async function getText(name, cropped, croppedData) {
-    const worker = await createWorker('eng');
-    //Descomentar para ajudar na depuração
-    //const file = './' + name + '.png'
-    //await cropped.writeAsync(file)
-    //console.log('Escrito arquivo ' + file)
-    const buffer = await cropped.getBufferAsync("image/png")
-    const bufferData = await croppedData.getBufferAsync("image/png")
-    const texto = await worker.recognize(buffer)
-    const data = await worker.recognize(bufferData)
-    const menu = {
-        text: !texto.data.text || texto.data.text <= 2 ||  ? "Fechado" : texto.data.text,
-        date: data.data.text,
-    }
+async function getText(cropped, croppedData) {
+  const worker = await createWorker("eng")
+// // //Descomentar para ajudar na depuração
+    // const file = './' + "teste" + '.png'
+    // await cropped.writeAsync(file)
+    // console.log('Escrito arquivo ' + file)
+  const buffer = await cropped.getBuffer("image/png")
+  const bufferData = await croppedData.getBuffer("image/png")
 
-    console.log('---- TEXTO RECONHECIDO ----')
-    console.log(`Data: ${menu.date} \n${menu.text}`);
+  const texto = await worker.recognize(buffer)
+  const data = await worker.recognize(bufferData)
 
+  await worker.terminate()
 
-    await worker.terminate();
-    return menu
+  return {
+    text: texto.data.text.trim(),
+    date: data.data.text.trim(),
+  }
 }
 
 async function saveToDynamoDB(menu, versao) {
