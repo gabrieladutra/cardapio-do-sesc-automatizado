@@ -5,7 +5,7 @@ import githubLogo from "../assets/github.png"
 
 async function fetchMenu() {
   const response = await fetch(
-    "https://wjvt3d5qwbxlh425nqc6pgnd3a0ybfyi.lambda-url.sa-east-1.on.aws/"
+    "https://cbkkjeoikxpvhyn4lxccshew5a0ababr.lambda-url.sa-east-1.on.aws/"
   )
 
   if (!response.ok) {

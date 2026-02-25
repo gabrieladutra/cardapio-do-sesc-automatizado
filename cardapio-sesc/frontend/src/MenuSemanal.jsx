@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query"
 
 async function fetchMenu() {
   const response = await fetch(
-    "https://nzn6ek54m6mq2asfgmogtrn3uy0eynrj.lambda-url.sa-east-1.on.aws/"
+    "https://xgvbsdsmtuvbhqdqcoqu3weu6e0uszvt.lambda-url.sa-east-1.on.aws/"
   )
   if (!response.ok) {
     throw new Error("Erro ao buscar menu")
