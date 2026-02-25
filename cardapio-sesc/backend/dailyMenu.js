@@ -76,7 +76,7 @@ export async function getLanMessage(){
     return `${hoje}\n${menuAtualizadoLan.texto.S}`;
 }
 
-export default async function handler(event) {
+export async function handler(event){
   if (event?.requestContext?.http?.method === "OPTIONS") {
     return {
       statusCode: 200,
