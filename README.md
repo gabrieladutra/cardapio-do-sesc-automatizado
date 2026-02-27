@@ -2,15 +2,15 @@
 
 Automação para capturar o cardápio diário e semanal do Sesc da Esquina, extrair o texto via OCR, detectar mudanças e enviar SMS automaticamente usando AWS.  
 O SMS é mandado de segunda á sexta-feira ás 11:30 da manhã.</br>
-Acesse https://menu.gabrieladutra.com para conferir o menu funcionando.
+Acesse [menu.gabrieladutra.com](https://menu.gabrieladutra.com) para conferir o menu funcionando.
 
 ### Arquitetura
 
 <p align="center">
   <img src="/assets/cloud2.drawio.png" width="750" height="500"/>
 </p>
-[Verifique os detalhes da arquitetura acessando:](https://drive.google.com/file/d/1wzzPNvxK7DxVlToLo9z_6Ua9677kPAly/view?usp=sharing
-)
+
+Verifique os detalhes da arquitetura acessando:[Drawio](https://drive.google.com/file/d/1wzzPNvxK7DxVlToLo9z_6Ua9677kPAly/view?usp=sharing)
 
 
 ### Aplicação
