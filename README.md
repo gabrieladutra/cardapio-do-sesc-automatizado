@@ -7,8 +7,11 @@ Acesse https://menu.gabrieladutra.com para conferir o menu funcionando.
 ### Arquitetura
 
 <p align="center">
-  <img src="/assets/cloud1.drawio" width="750" height="500"/>
+  <img src="/assets/cloud2.drawio" width="750" height="500"/>
 </p>
+[Verifique os detalhes da arquitetura acessando:](https://drive.google.com/file/d/1wzzPNvxK7DxVlToLo9z_6Ua9677kPAly/view?usp=sharing
+)
+
 
 ### Aplicação
 
