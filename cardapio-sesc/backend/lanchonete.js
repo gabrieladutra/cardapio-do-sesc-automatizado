@@ -2,6 +2,12 @@ import { DynamoDBClient, PutItemCommand, QueryCommand } from "@aws-sdk/client-dy
 import { parse } from "node-html-parser"
 import { createWorker } from "tesseract.js"
 import {Jimp} from "jimp"
+import OpenAI from 'openai'
+
+const client = new OpenAI({
+  apiKey: process.env['OPENAI_API_KEY'],
+});
+
 
 const dynamo = new DynamoDBClient({ region: 'sa-east-1' });
 
@@ -124,37 +130,39 @@ async function processMenu() {
 }
 async function getText(cropped, croppedData) {
   const worker = await createWorker("eng")
-// // //Descomentar para ajudar na depuração
-    // const file = './' + "teste" + '.png'
-    // await cropped.writeAsync(file)
-    // console.log('Escrito arquivo ' + file)
+  // // //Descomentar para ajudar na depuração
+  // const file = './' + "teste" + '.png'
+  // await cropped.writeAsync(file)
+  // console.log('Escrito arquivo ' + file)
   const buffer = await cropped.getBuffer("image/png")
   const bufferData = await croppedData.getBuffer("image/png")
 
-  const texto = await worker.recognize(buffer)
+  let textoReconhecido = await worker.recognize(buffer)
   const data = await worker.recognize(bufferData)
+  let texto = textoReconhecido.data.text
+
+  const response = await client.chat.completions.create({
+    model: 'gpt-4.1-mini',
+    messages: [
+      { role: 'system', content: 'Você irá ajudar a refinar textos extraídos de um OCR. É necessário corrigir a grafia e formato do texto. Os textos são opções de refeições, use isso para preencher melhor as palavras. O formato da responsta deve ser exclusivamente JSON com uma única propriedade "text". A resposta com qualquer outro formato ou propriedades causará erros.' },
+      { role: 'user', content: texto }
+    ],
+    response_format: { type: 'json_object' }
+  });
+
+  texto = JSON.parse(response.choices[0].message.content)
+  if (typeof texto !== 'object' || typeof texto.text != 'string') {
+    console.error(`O chatgpt respondeu num formato inválido: ` + JSON.stringify(texto))
+    const outraTentativa = await getText(cropped, croppedData)
+    return outraTentativa
+  }
 
   await worker.terminate()
 
   return {
-    text: texto.data.text.trim(),
+    text: texto.text,
     date: data.data.text.trim(),
   }
-}
-
-async function saveToDynamoDB(menu, versao) {
-    const params = {
-        TableName: 'lanchonete',
-
-        Item: {
-            data: { S: String(menu.date || '').trim() },
-            texto: { S: String(menu.text || '').trim() },
-            versao: { N: String(versao) },
-        },
-    };
-
-    await dynamo.send(new PutItemCommand(params));
-    console.log('Item salvo no DynamoDB:', menu.date);
 }
 
 async function verifyVersion(date) {
