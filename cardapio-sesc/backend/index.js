@@ -10,23 +10,12 @@ const client = new OpenAI({
   apiKey: process.env['OPENAI_API_KEY'],
 });
 
-
 export async function handler(event) {
-  //CORS preflight
-  // if (event.requestContext?.http?.method === "OPTIONS") {
-  //   return {
-  //     statusCode: 200,
-  //     headers: corsHeaders(),
-  //     body: "",
-  //   }
-  // }
-
   try {
     await processMenu()
 
     return {
       statusCode: 200,
-      headers: corsHeaders(),
       body: JSON.stringify({ ok: true }),
     }
   } catch (error) {
@@ -34,17 +23,8 @@ export async function handler(event) {
 
     return {
       statusCode: 500,
-      headers: corsHeaders(),
       body: JSON.stringify({ error: "Erro interno" }),
     }
-  }
-}
-
-function corsHeaders() {
-  return {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Headers": "*",
-    "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
   }
 }
 
@@ -130,29 +110,9 @@ async function processMenu() {
   }
 }
 
-// async function getText(cropped, croppedData) {
-//   const worker = await createWorker("eng")
-
-//   const buffer = await cropped.getBufferAsync("image/png")
-//   const bufferData = await croppedData.getBufferAsync("image/png")
-
-//   const texto = await worker.recognize(buffer)
-//   const data = await worker.recognize(bufferData)
-
-//   await worker.terminate()
-
-//   return {
-//     text: texto.data.text,
-//     date: data.data.text,
-//   }
-// }
-
 async function getText(cropped, croppedData) {
   const worker = await createWorker("eng")
-  // // //Descomentar para ajudar na depuração
-  // const file = './' + "teste" + '.png'
-  // await cropped.writeAsync(file)
-  // console.log('Escrito arquivo ' + file)
+
   const buffer = await cropped.getBuffer("image/png")
   const bufferData = await croppedData.getBuffer("image/png")
 
@@ -209,4 +169,4 @@ async function verifyVersion(date) {
   const data = await dynamo.send(new QueryCommand(params))
   return data.Items ?? []
 }
-handler()
+//handler()
