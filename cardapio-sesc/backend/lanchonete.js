@@ -142,7 +142,7 @@ async function getText(cropped, croppedData) {
 
 async function saveToDynamoDB(menu, versao) {
   const params = {
-    TableName: "menu",
+    TableName: "lanchonete",
     Item: {
       data: { S: String(menu.date || "").trim() },
       texto: { S: String(menu.text || "").trim() },
