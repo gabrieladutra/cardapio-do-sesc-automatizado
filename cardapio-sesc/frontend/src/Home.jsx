@@ -12,6 +12,7 @@ async function fetchMenu() {
     throw new Error("Erro ao buscar menu")
   }
 
+  
   return response.json()
 }
 
@@ -28,12 +29,26 @@ export default function Home() {
   let menuLanchonete = ""
 
   if (data && data.restaurante) {
-    dataTexto = data.restaurante.substring(0, 10)
-    menuRestaurante = data.restaurante.substring(10).replace(/\n\s*\n+/g, "\n").trim()
+    const partesRestaurante = data.restaurante.split("\n")
+
+    dataTexto = partesRestaurante[0]
+    menuRestaurante = partesRestaurante
+      .slice(1)
+      .join("\n")
+      .replace(/\n\s*\n+/g, "\n")
+      .trim()
   }
 
   if (data && data.lanchonete) {
-    menuLanchonete = data.lanchonete.substring(10).replace(/\n\s*\n+/g, "\n").trim()
+    const partesLanchonete = data.lanchonete.split("\n")
+
+    menuLanchonete = partesLanchonete
+      .slice(1)
+      .join("\n")
+      .replace(/\n\s*\n+/g, "\n")
+      .trim()
+
+      console.log(data)
   }
 
   if (isError) {
