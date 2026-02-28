@@ -123,7 +123,7 @@ async function getText(cropped, croppedData) {
   const response = await client.chat.completions.create({
     model: 'gpt-4.1-mini',
     messages: [
-      { role: 'system', content: 'Você irá ajudar a refinar textos extraídos de um OCR. É necessário corrigir a grafia e formato do texto. Os textos são opções de refeições, use isso para preencher melhor as palavras. O formato da responsta deve ser exclusivamente JSON com uma única propriedade "text". A resposta com qualquer outro formato ou propriedades causará erros.' },
+      { role: 'system', content: 'Você irá ajudar a refinar textos extraídos de um OCR. Mantenha cada item em uma linha separada. É necessário corrigir a grafia e formato do texto. Os textos são opções de refeições, use isso para preencher melhor as palavras. Não transforme lista em parágrafo. O formato da responsta deve ser exclusivamente JSON com uma única propriedade "text". A resposta com qualquer outro formato ou propriedades causará erros.' },
       { role: 'user', content: texto }
     ],
     response_format: { type: 'json_object' }
@@ -145,16 +145,22 @@ async function getText(cropped, croppedData) {
 }
 
 async function saveToDynamoDB(menu, versao) {
+  if (!menu.date) {
+    console.log("Data inválida, não será salva:", menu)
+    return
+  }
+
   const params = {
-    TableName: "menu",
+    TableName: "menu", 
     Item: {
-      data: { S: String(menu.date || "").trim() },
+      data: { S: String(menu.date).trim() },
       texto: { S: String(menu.text || "").trim() },
       versao: { N: String(versao) },
     },
   }
-
+  console.log("antes de salvar:")
   await dynamo.send(new PutItemCommand(params))
+  console.log("antes de salvar:", menu)
 }
 
 async function verifyVersion(date) {

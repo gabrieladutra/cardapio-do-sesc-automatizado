@@ -35,7 +35,7 @@ async function processMenu() {
 
   const html = await response.text()
   const root = parse(html)
-  const img = root.querySelector('.entry-content p>img')
+  const img = root.querySelector('.entry-content strong>img')
 
   if (img == null) {
     throw new Error("Mudança no seletor da classe que contem a img. Corrija o seletor")
@@ -119,7 +119,7 @@ async function getText(cropped, croppedData) {
   const response = await client.chat.completions.create({
     model: 'gpt-4.1-mini',
     messages: [
-      { role: 'system', content: 'Você irá ajudar a refinar textos extraídos de um OCR. É necessário corrigir a grafia e formato do texto e escrever o texto com o primeiro caracter da palavra em letra maiúscula e o restante da palavra em letra minúscula se for a palavra E/OU deixe minúsculo. Os textos são opções de refeições, use isso para preencher melhor as palavras. O formato da responsta deve ser exclusivamente JSON com uma única propriedade "text". A resposta com qualquer outro formato ou propriedades causará erros.' },
+      { role: 'system', content: 'Você irá ajudar a refinar textos extraídos de um OCR. É necessário corrigir a grafia e formato do texto. Os textos são opções de refeições, use isso para preencher melhor as palavras. O formato da responsta deve ser exclusivamente JSON com uma única propriedade "text". A resposta com qualquer outro formato ou propriedades causará erros.' },
       { role: 'user', content: texto }
     ],
     response_format: { type: 'json_object' }
@@ -136,43 +136,41 @@ async function getText(cropped, croppedData) {
 
   return {
     text: texto.text,
-    date: data.data.text,
+    date: data.data.text.trim(),
   }
 }
 
 async function saveToDynamoDB(menu, versao) {
+  if (!menu.date) {
+    console.log("Data inválida, não será salva:", menu)
+    return
+  }
+
   const params = {
     TableName: "lanchonete",
     Item: {
-      data: { S: String(menu.date || "").trim() },
+      data: { S: String(menu.date).trim() },
       texto: { S: String(menu.text || "").trim() },
       versao: { N: String(versao) },
     },
   }
 
   await dynamo.send(new PutItemCommand(params))
+  console.log("SALVANDO NO DYNAMO:", menu.date, versao)
 }
+
 
 async function verifyVersion(date) {
   const params = {
     TableName: "lanchonete",
     KeyConditionExpression: "#d = :d",
-    ExpressionAttributeNames: {
-      "#d": "data",
-    },
-    ExpressionAttributeValues: {
-      ":d": { S: String(date).trim() },
-    },
+    ExpressionAttributeNames: { "#d": "data" },
+    ExpressionAttributeValues: { ":d": { S: String(date).trim() } },
     ConsistentRead: true,
-  };
-  const data = await dynamo.send(new QueryCommand(params));
-  if (!data.Items || data.Items.length === 0) {
-    console.log("Nenhum item encontrado para:", date);
-    return [];
   }
-  console.log("Itens encontrados:", data.Items);
 
-  return data.Items;
+  const data = await dynamo.send(new QueryCommand(params))
+  return data.Items ?? []
 }
 //module.exports.handler = handler
 //handler()
