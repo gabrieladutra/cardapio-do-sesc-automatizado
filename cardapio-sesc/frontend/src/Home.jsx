@@ -29,7 +29,7 @@ export default function Home() {
 
   if (data && data.restaurante) {
     dataTexto = data.restaurante.substring(0, 10)
-    menuRestaurante = data.restaurante.substring(10).replace(/\n\s*\n+/g, "\n").trim() 
+    menuRestaurante = data.restaurante.substring(10).replace(/\n\s*\n+/g, "\n").trim()
   }
 
   if (data && data.lanchonete) {
@@ -55,7 +55,7 @@ export default function Home() {
       </h1>
 
       {!isLoading && dataTexto && (
-        <h1 className="text-yellow-800 text-lg md:text-2xl mt-2 md:mt-4">
+        <h1 className="text-yellow-800 text-lg md:text-2xl mt-2 md:mt-4 ">
           {dataTexto}
         </h1>
       )}
@@ -65,7 +65,7 @@ export default function Home() {
           <h2 className="text-blue-950 font-semibold md:text-2xl md:pb-3">
             Restaurante
           </h2>
-          <div className="border-2 border-blue-950 rounded-md w-50 h-70 pt-5 md:w-70 md:h-75 md:pt-3 whitespace-pre-line text-center md:text-lg">
+          <div className="border-2 border-blue-950 rounded-md w-50 h-70 pt-5 md:w-70 md:h-75 md:pt-3 text-center md:text-lg">
             {isLoading ? (
               <Loader
                 size={32}
@@ -73,17 +73,19 @@ export default function Home() {
                 className="animate-spin mt-20 ml-20 md:ml-28 text-gray-400"
               />
             ) : (
-              menuRestaurante
+              <div className="whitespace-pre-line">
+                {menuRestaurante}
+              </div>
             )}
           </div>
         </div>
 
-    
+
         <div className="flex flex-col items-center">
           <h2 className="text-blue-950 font-semibold md:text-2xl md:pb-3">
             Lanchonete
           </h2>
-          <div className="border-2 border-blue-950 rounded-md w-50 pt-5 h-70 md:w-70 md:h-75 md:pt-3 whitespace-pre-line text-center md:text-lg">
+          <div className="border-2 border-blue-950 rounded-md w-50 pt-5 h-70 md:w-70 md:h-75 md:pt-3 text-center md:text-lg">
             {isLoading ? (
               <Loader
                 size={32}
@@ -91,7 +93,9 @@ export default function Home() {
                 className="animate-spin mt-20 ml-20 md:ml-28 text-gray-400"
               />
             ) : (
-              menuLanchonete
+              <div className="whitespace-pre-line">
+                {menuLanchonete}
+              </div>
             )}
           </div>
         </div>
@@ -101,7 +105,7 @@ export default function Home() {
         onClick={() => navigate("/menu-semanal/")}
         className="rounded-md bg-green-700 text-white h-11 px-4 flex items-center gap-2 cursor-pointer mt-5 md:mb-8 md:mt-10 md:w-60 md:justify-center md:text-lg"
       >
-        <CircleChevronRight/>
+        <CircleChevronRight />
         Menu Semanal
       </button>
     </div>
