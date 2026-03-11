@@ -12,7 +12,6 @@ async function fetchMenu() {
     throw new Error("Erro ao buscar menu")
   }
 
-  
   return response.json()
 }
 
@@ -48,7 +47,6 @@ export default function Home() {
       .replace(/\n\s*\n+/g, "\n")
       .trim()
 
-      console.log(data)
   }
 
   if (isError) {

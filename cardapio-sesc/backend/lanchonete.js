@@ -35,7 +35,7 @@ async function processMenu() {
 
   const html = await response.text()
   const root = parse(html)
-  const img = root.querySelector('.entry-content strong>img')
+  const img = root.querySelector('.entry-content p>img')
 
   if (img == null) {
     throw new Error("Mudança no seletor da classe que contem a img. Corrija o seletor")
