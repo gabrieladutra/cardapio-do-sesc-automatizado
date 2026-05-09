@@ -15,7 +15,7 @@ async function sendMessage(mensagem) {
   );
   if (!response.ok)
     throw new Error(`Erro na requisição. Status: ` + response.status);
-  console.log(`Message sent to telegram`);
+  console.log(`Mensagem envida para o Telegram!`);
 }
 
 export default async function handler() {
